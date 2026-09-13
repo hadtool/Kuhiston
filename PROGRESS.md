@@ -22,9 +22,18 @@
 **Сделано:**
 - В DECISIONS.md зафиксирован бэкенд: Django + Django REST Framework (встроенная админка для волонтёрской панели, i18n, роли, ORM+миграции, django.contrib.gis для PostGIS).
 - В ISSUES.md пункт про Django/FastAPI отмечен как решённый.
+- Инициализирован git-репозиторий (`git init`, ветка main), первый коммит `ba24e91`.
+- Структура проекта:
+  - `backend/` — Django 6.1 + DRF 3.18, виртуальное окружение `.venv`, `requirements.txt`.
+  - `backend/kuhiston/settings.py` — SECRET_KEY/DEBUG/ALLOWED_HOSTS через переменные окружения, DRF в INSTALLED_APPS, i18n (ru/en/tg, `LANGUAGE_CODE='ru'`, `TIME_ZONE='Asia/Dushanbe'`), TEMPLATES/STATICFILES_DIRS указывают на `frontend/`.
+  - `backend/.env.example` — шаблон переменных окружения (Django, БД, MapTiler).
+  - `frontend/` — папки `templates/`, `static/css|js|img/`, `locale/`.
+  - `.gitignore` — исключает `.venv`, `.env`, `__pycache__` и т.д.
+- Проверка работоспособности: `manage.py check` без ошибок, миграции применяются, `runserver` отвечает HTTP 200 на `/`.
+- Задача «Инициализировать репозиторий...» отмечена `[x]` в TASKS.md.
 
-**Не сделано / отложено:** —
-**Заметки для следующей сессии:** —
+**Не сделано / отложено:** PostgreSQL+PostGIS, хостинг, настоящие env-переменные, i18n-инфраструктура, бренд-конфиг — следующие задачи Этапа 0.
+**Заметки для следующей сессии:** Запуск dev-сервера: `backend/.venv/bin/python backend/manage.py runserver` из корня проекта. База по умолчанию sqlite для локальной разработки; Postgres настраивать в следующей задаче. `psycopg2-binary==2.9.11` уже в requirements. Дизайн-референс — `tajikistan-map-3d.html` (индиго `#1a2740` + охра `#c98a2c`, шрифты Fraunces/Manrope).
 
 ---
 
