@@ -172,6 +172,42 @@ header#site-header h1 {
 
 .place-dot:hover { background: var(--ochre-light); }
 
+/* панель простого маршрута (Этап 3) */
+#route-panel {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 3;
+  width: min(320px, calc(100% - 36px));
+  max-height: calc(100% - 120px);
+  overflow-y: auto;
+  background: var(--white);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.route-panel__title { margin: 0 0 10px; font-family: var(--font-display); }
+
+.route-list { margin: 0; padding: 0; list-style: none; }
+.route-list__item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.route-list__item:hover { background: var(--bg); border-radius: 8px; }
+.route-list__num {
+  width: 22px; height: 22px; flex: 0 0 auto;
+  display: grid; place-items: center;
+  background: var(--ochre); color: var(--white);
+  font-size: 0.75rem; font-weight: 700;
+  border-radius: 50%;
+}
+.route-list__name { flex: 1; color: var(--ink); }
+.route-list__dist { color: var(--muted); font-size: 0.85rem; white-space: nowrap; }
+.route-panel__total { margin-top: 10px; font-size: 0.9rem; color: var(--muted); }
+
 /* карточка места */
 #place-card {
   position: absolute;

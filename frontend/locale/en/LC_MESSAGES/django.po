@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kuhiston 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-14 23:39+0500\n"
+"POT-Creation-Date: 2026-09-14 23:48+0500\n"
 "PO-Revision-Date: 2026-09-14\n"
 "Last-Translator: Kuhiston team <noreply@kuhiston.local>\n"
 "Language-Team: English <noreply@kuhiston.local>\n"
@@ -19,7 +19,7 @@ msgstr ""
 msgid "Определить моё местоположение"
 msgstr "Find my location"
 
-#: backend/places/views.py:24 frontend/templates/home.html:30
+#: backend/places/views.py:24 frontend/templates/home.html:31
 msgid "Точка выбрана — нажмите ещё раз, чтобы убрать"
 msgstr "Point selected — click again to remove"
 
@@ -63,6 +63,24 @@ msgstr "Region"
 msgid "сомони"
 msgstr "somoni"
 
+#: backend/places/views.py:35
+msgid "Кликните по точке маршрута, чтобы открыть место"
+msgstr "Click a route point to open the place"
+
+#: backend/places/views.py:36
+msgid "Итого"
+msgstr "Total"
+
+#: backend/places/views.py:37
+#, fuzzy
+#| msgid "Рядом пока нет мест"
+msgid "Рядом не найдено мест"
+msgstr "No places nearby"
+
+#: backend/places/views.py:38
+msgid "км"
+msgstr "km"
+
 #: frontend/templates/home.html:3
 msgid "Карта мест"
 msgstr "Map of places"
@@ -76,8 +94,16 @@ msgid "Все"
 msgstr "All"
 
 #: frontend/templates/home.html:27
+msgid "Маршрут"
+msgstr "Route"
+
+#: frontend/templates/home.html:28
 msgid "3D-рельеф"
 msgstr "3D terrain"
+
+#: frontend/templates/home.html:35
+msgid "Ближайшие места"
+msgstr "Nearest places"
 
 #~ msgid "Туристическое приложение по Таджикистану"
 #~ msgstr "Tourism app for Tajikistan"

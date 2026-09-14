@@ -122,7 +122,7 @@
       if (!resp.ok) throw new Error(resp.status);
       const data = await resp.json();
 
-      renderMarkers(data.places || []);
+      renderMarkers(data || []);
     } catch (err) {
       console.error("loadPlaces:", err);
     }
@@ -212,6 +212,99 @@
     } else {
       map.setTerrain(null);
       map.easeTo({ pitch: 0 });
+    }
+  });
+
+  /* ---------- простые маршруты (Этап 3, задача 1) ---------- */
+  const btnRoute = document.getElementById("btn-route");
+  const routePanel = document.getElementById("route-panel");
+  const routeList = document.getElementById("route-list");
+  const routeTotal = document.getElementById("route-total");
+  let routeSourceId = null;
+
+  async function loadSimpleRoute() {
+    try {
+      const origin = state.userPoint || map.getCenter();
+      const url = new URL("/api/route/simple/", window.location.origin);
+      url.searchParams.set("lat", origin.lat);
+      url.searchParams.set("lng", origin.lng);
+      url.searchParams.set("limit", "5");
+
+      const resp = await fetch(url, { headers: { Accept: "application/json" } });
+      if (!resp.ok) throw new Error(resp.status);
+      const data = await resp.json();
+      renderRoute(data);
+    } catch (err) {
+      console.error("loadSimpleRoute:", err);
+    }
+  }
+
+  function renderRoute(data) {
+    if (routeSourceId) {
+      map.removeLayer(routeSourceId);
+      map.removeSource(routeSourceId);
+      routeSourceId = null;
+    }
+    routePanel.hidden = true;
+    routeList.innerHTML = "";
+
+    const pts = data.points || [];
+    if (!pts.length) {
+      routeTotal.textContent = I18N.route_empty;
+      routeTotal.hidden = false;
+      routePanel.hidden = false;
+      return;
+    }
+
+    const coords = [[data.start.lng, data.start.lat], ...pts.map((p) => [p.lng, p.lat])];
+    routeSourceId = "route-line";
+    map.addSource(routeSourceId, {
+      type: "geojson",
+      data: { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: coords } },
+    });
+    map.addLayer({
+      id: routeSourceId,
+      type: "line",
+      source: routeSourceId,
+      layout: { "line-cap": "round", "line-join": "round" },
+      paint: { "line-color": "#1a2740", "line-width": 3, "line-dasharray": [1, 0.75] },
+    });
+
+    pts.forEach((p, i) => {
+      const li = document.createElement("li");
+      li.className = "route-list__item";
+      li.innerHTML = `
+        <span class="route-list__num">${i + 1}</span>
+        <span class="route-list__name">${escapeHtml(p.name)}</span>
+        <span class="route-list__dist">${formatter.format(p.distance_from_start_km)} ${I18N.km}</span>`;
+      li.addEventListener("click", () => openPlaceCard(p.id));
+      routeList.appendChild(li);
+    });
+
+    routeTotal.textContent = `${I18N.route_total}: ${formatter.format(data.total_km)} ${I18N.km} · ${I18N.route_hint}`;
+    routeTotal.hidden = false;
+    routePanel.hidden = false;
+  }
+
+  btnRoute.addEventListener("click", () => {
+    if (!routePanel.hidden && routeSourceId) {
+      routePanel.hidden = true;
+      if (routeSourceId) {
+        map.removeLayer(routeSourceId);
+        map.removeSource(routeSourceId);
+        routeSourceId = null;
+      }
+      return;
+    }
+    loadSimpleRoute();
+  });
+
+  document.getElementById("route-close").addEventListener("click", () => {
+    routePanel.hidden = true;
+    if (routeSourceId) {
+      map.removeLayer(routeSourceId);
+      map.removeSource(routeSourceId);
+      routeSourceId = null;
     }
   });
 

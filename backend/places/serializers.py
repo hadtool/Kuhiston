@@ -116,3 +116,36 @@ class PlaceDetailSerializer(serializers.ModelSerializer):
 
     def get_access_difficulty(self, obj):
         return obj.get_access_difficulty_display()
+
+
+class SimpleRoutePointSerializer(serializers.ModelSerializer):
+    """Точка простого маршрута: расстояние от старта и между соседними точками."""
+
+    name = serializers.SerializerMethodField()
+    category = serializers.SerializerMethodField()
+    lat = serializers.SerializerMethodField()
+    lng = serializers.SerializerMethodField()
+    distance_from_start_km = serializers.SerializerMethodField()
+    leg_km = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Place
+        fields = ["id", "name", "category", "lat", "lng", "distance_from_start_km", "leg_km"]
+
+    def get_name(self, obj):
+        return obj.get_name(self.context["language"])
+
+    def get_category(self, obj):
+        return obj.category.get_name(self.context["language"])
+
+    def get_lat(self, obj):
+        return float(obj.latitude)
+
+    def get_lng(self, obj):
+        return float(obj.longitude)
+
+    def get_distance_from_start_km(self, obj):
+        return getattr(obj, "distance_from_start_km", None)
+
+    def get_leg_km(self, obj):
+        return getattr(obj, "leg_km", None)

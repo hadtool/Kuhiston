@@ -25,6 +25,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('api/places/', api.PlaceListView.as_view(), name='api-places-list'),
     path('api/places/<int:pk>/', api.PlaceDetailView.as_view(), name='api-places-detail'),
+    path('api/route/simple/', api.SimpleRouteView.as_view(), name='api-route-simple'),
     path('api/categories/', api.CategoryListView.as_view(), name='api-categories'),
     path('admin/', admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),

@@ -32,6 +32,10 @@ def home(request):
         "seasons": _("Рекомендуемое время"),
         "region": _("Регион"),
         "currency": _("сомони"),
+        "route_hint": _("Кликните по точке маршрута, чтобы открыть место"),
+        "route_total": _("Итого"),
+        "route_empty": _("Рядом не найдено мест"),
+        "km": _("км"),
     }
     context = {
         "maptiler_api_key": settings.MAPTILER_API_KEY,

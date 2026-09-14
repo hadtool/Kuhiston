@@ -2,9 +2,15 @@ import math
 
 from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import Place, PlaceCategory
-from .serializers import PlaceCategorySerializer, PlaceDetailSerializer, PlaceListSerializer
+from .serializers import (
+    PlaceCategorySerializer,
+    PlaceDetailSerializer,
+    PlaceListSerializer,
+    SimpleRoutePointSerializer,
+)
 
 
 def haversine(lat1, lng1, lat2, lng2):
@@ -83,3 +89,50 @@ class CategoryListView(generics.ListAPIView):
         ctx = super().get_serializer_context()
         ctx["language"] = getattr(self.request, "LANGUAGE_CODE", "ru")
         return ctx
+
+
+class SimpleRouteView(APIView):
+    """Простой маршрут: список и маршрут из N ближайших мест от точки отправителя.
+
+    Query: lat, lng (обязательны), limit (до 10, по умолчанию 5).
+    Возвращает точки, отсортированные по расстоянию от старта,
+    расстояние «по воздуху» от предыдущей точки и суммарную дистанцию (в км).
+    """
+
+    def get_serializer_context(self):
+        return {"language": getattr(self.request, "LANGUAGE_CODE", "ru")}
+
+    def get(self, request):
+        lat = request.query_params.get("lat")
+        lng = request.query_params.get("lng")
+        if not lat or not lng:
+            return Response({"error": "lat and lng are required"}, status=400)
+        try:
+            lat_f, lng_f = float(lat), float(lng)
+            limit = min(max(int(request.query_params.get("limit", 5)), 1), 10)
+        except ValueError:
+            return Response({"error": "invalid lat/lng/limit"}, status=400)
+
+        places = list(Place.objects.select_related("category", "region").filter(moderation_status="published"))
+        for p in places:
+            p.distance_from_start_km = round(haversine(lat_f, lng_f, float(p.latitude), float(p.longitude)), 1)
+        places.sort(key=lambda p: p.distance_from_start_km)
+        places = places[:limit]
+
+        total = 0.0
+        prev = (lat_f, lng_f)
+        for p in places:
+            p.leg_km = round(haversine(prev[0], prev[1], float(p.latitude), float(p.longitude)), 1)
+            total += p.leg_km
+            prev = (float(p.latitude), float(p.longitude))
+
+        serializer = SimpleRoutePointSerializer(places, many=True, context=self.get_serializer_context())
+        return Response(
+            {
+                "start": {"lat": lat_f, "lng": lng_f},
+                "limit": limit,
+                "count": len(serializer.data),
+                "total_km": round(total, 1),
+                "points": serializer.data,
+            }
+        )
