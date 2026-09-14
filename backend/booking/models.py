@@ -96,3 +96,54 @@ class BookingObject(models.Model):
 
     def __str__(self):
         return self.name_ru
+
+
+class BookingRequest(models.Model):
+    """Заявка на бронирование без онлайн-оплаты (PROJECT.md раздел 7).
+
+    Турист оставляет заявку (даты, контакты), владелец объекта подтверждает или
+    отклоняет её вручную. Онлайн-оплата — вне MVP.
+    """
+
+    class Status(models.TextChoices):
+        NEW = "new", "новая"
+        CONFIRMED = "confirmed", "подтверждена"
+        REJECTED = "rejected", "отклонена"
+        CANCELLED = "cancelled", "отменена туристом"
+
+    booking_object = models.ForeignKey(
+        BookingObject,
+        on_delete=models.CASCADE,
+        related_name="requests",
+        verbose_name="объект бронирования",
+    )
+    tourist = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="booking_requests",
+        verbose_name="турист",
+    )
+    tourist_name = models.CharField(max_length=200, verbose_name="имя туриста")
+    tourist_contact = models.CharField(max_length=200, verbose_name="контакт туриста (телефон/email)")
+    check_in = models.DateField(null=True, blank=True, verbose_name="дата заезда")
+    check_out = models.DateField(null=True, blank=True, verbose_name="дата выезда")
+    notes = models.TextField(blank=True, verbose_name="комментарий")
+    pay_on_site = models.BooleanField(default=False, verbose_name="оплата на месте")
+    status = models.CharField(
+        max_length=20,
+        choices=Status.choices,
+        default=Status.NEW,
+        verbose_name="статус",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "заявка на бронирование"
+        verbose_name_plural = "заявки на бронирование"
+
+    def __str__(self):
+        return f"{self.booking_object} — {self.tourist_name} ({self.get_status_display()})"
