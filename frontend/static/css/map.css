@@ -6,6 +6,9 @@
   --paper: #fbf7ef;        /* тёплый фон */
   --muted: #5a6478;        /* приглушённый текст */
   --white: #ffffff;
+  --border: #e6dfd1;       /* рамки */
+  --bg: #f4efe4;           /* подложка ховера */
+  --font-display: "Fraunces", Georgia, serif;
   --shadow: 0 4px 16px rgba(26, 39, 64, 0.25);
   --radius: 14px;
 }
@@ -207,6 +210,30 @@ header#site-header h1 {
 .route-list__name { flex: 1; color: var(--ink); }
 .route-list__dist { color: var(--muted); font-size: 0.85rem; white-space: nowrap; }
 .route-panel__total { margin-top: 10px; font-size: 0.9rem; color: var(--muted); }
+
+/* панель готовых (многодневных) маршрутов — Этап 3, задача 2 */
+#routes-panel {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 3;
+  width: min(340px, calc(100% - 36px));
+  max-height: calc(100% - 120px);
+  overflow-y: auto;
+  background: var(--white);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+#routes-list { margin: 0; padding: 0; list-style: none; }
+.multiday-title { margin: 0 0 2px; font-family: var(--font-display); }
+.multiday-region { margin: 0 0 10px; color: var(--muted); font-size: 0.85rem; }
+.multiday-list { margin: 0 0 0 4px; padding: 0; list-style: none; }
+.multiday-day { margin-bottom: 12px; }
+.multiday-day h4 {
+  margin: 0 0 6px; font-size: 0.9rem; color: var(--ochre);
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
 
 /* карточка места */
 #place-card {

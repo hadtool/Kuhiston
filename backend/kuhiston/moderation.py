@@ -42,3 +42,15 @@ def check_place(place):
             for word in find_forbidden_words(text, lang):
                 hits.append({"lang": lang, "word": word})
     return hits
+
+
+def check_route(route):
+    """Проверяет мультиязычные поля маршрута (название + описание)."""
+    hits = []
+    for lang in ("ru", "en", "tg"):
+        name = getattr(route, f"name_{lang}", "") or ""
+        description = getattr(route, f"description_{lang}", "") or ""
+        for text in (name, description):
+            for word in find_forbidden_words(text, lang):
+                hits.append({"lang": lang, "word": word})
+    return hits

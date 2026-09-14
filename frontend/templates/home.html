@@ -25,10 +25,18 @@
   <div id="scene-actions">
     <button id="btn-locate" title="{% trans 'Определить моё местоположение' %}">⌖</button>
     <button id="btn-route" title="{% trans 'Маршрут' %}">🗺</button>
+    <button id="btn-routes" title="{% trans 'Готовые маршруты' %}">🎒</button>
     <button id="btn-3d" title="{% trans '3D-рельеф' %}">🏔</button>
   </div>
 
   <div id="user-marker-hint" hidden>{% trans "Точка выбрана — нажмите ещё раз, чтобы убрать" %}</div>
+
+  <aside id="routes-panel" hidden>
+    <button class="place-card__close" id="routes-close">×</button>
+    <h3 class="route-panel__title">{% trans "Готовые маршруты" %}</h3>
+    <ul id="routes-list"></ul>
+    <div id="routes-detail" hidden></div>
+  </aside>
 
   <aside id="route-panel" hidden>
     <button class="place-card__close" id="route-close">×</button>

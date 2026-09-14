@@ -308,6 +308,122 @@
     }
   });
 
+  /* ---------- готовые многодневные маршруты (Этап 3, задача 2) ---------- */
+  const btnRoutes = document.getElementById("btn-routes");
+  const routesPanel = document.getElementById("routes-panel");
+  const routesList = document.getElementById("routes-list");
+  const routesDetail = document.getElementById("routes-detail");
+  let multidayLineId = null;
+
+  function drawMultidayLine(coords) {
+    if (multidayLineId) {
+      map.removeLayer(multidayLineId);
+      map.removeSource(multidayLineId);
+      multidayLineId = null;
+    }
+    if (!coords.length) return;
+    multidayLineId = "multiday-line";
+    map.addSource(multidayLineId, {
+      type: "geojson",
+      data: { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: coords } },
+    });
+    map.addLayer({
+      id: multidayLineId,
+      type: "line",
+      source: multidayLineId,
+      layout: { "line-cap": "round", "line-join": "round" },
+      paint: { "line-color": "#c98a2c", "line-width": 4 },
+    });
+  }
+
+  async function loadMultiRoutes() {
+    try {
+      const resp = await fetch("/api/routes/", { headers: { Accept: "application/json" } });
+      if (!resp.ok) throw new Error(resp.status);
+      const routes = await resp.json();
+      routesList.innerHTML = "";
+      if (!routes.length) {
+        routesList.innerHTML = `<li class="route-list__item">${I18N.route_empty}</li>`;
+      }
+      routes.forEach((r) => {
+        const li = document.createElement("li");
+        li.className = "route-list__item";
+        li.innerHTML = `
+          <span class="route-list__name">${escapeHtml(r.name)}</span>
+          <span class="route-list__dist">${r.duration_days} ${I18N.days} · ${r.stops_count} ${I18N.points_noun}</span>`;
+        li.addEventListener("click", () => openMultiRoute(r.id));
+        routesList.appendChild(li);
+      });
+      routesDetail.hidden = true;
+      routesPanel.hidden = false;
+    } catch (err) {
+      console.error("loadMultiRoutes:", err);
+    }
+  }
+
+  async function openMultiRoute(id) {
+    try {
+      const resp = await fetch(`/api/routes/${id}/`, { headers: { Accept: "application/json" } });
+      if (!resp.ok) throw new Error(resp.status);
+      const r = await resp.json();
+      renderMultiRoute(r);
+    } catch (err) {
+      console.error("openMultiRoute:", err);
+    }
+  }
+
+  function renderMultiRoute(r) {
+    const coords = [];
+    r.days.forEach((d) => d.stops.forEach((s) => coords.push([s.lng, s.lat])));
+    drawMultidayLine(coords);
+
+    const daysHtml = r.days
+      .map(
+        (d) => `
+        <li class="multiday-day">
+          <h4>${I18N.day_label} ${d.day}</h4>
+          <ol class="route-list">
+            ${d.stops
+              .map(
+                (s) => `
+                <li class="route-list__item" data-place="${s.place_id}">
+                  <span class="route-list__num">${s.order + 1}</span>
+                  <span class="route-list__name">${escapeHtml(s.place_name)}</span>
+                  <span class="route-list__dist">${s.minutes ? `${formatter.format(s.minutes)} ${I18N.min}` : ""}</span>
+                </li>`,
+              )
+              .join("")}
+          </ol>
+        </li>`,
+      )
+      .join("");
+
+    routesDetail.innerHTML = `
+      <h4 class="multiday-title">${escapeHtml(r.name)}</h4>
+      <p class="multiday-region">${escapeHtml(r.region || "")} · ${r.duration_days} ${I18N.days}</p>
+      <ul class="multiday-list">${daysHtml}</ul>`;
+    routesDetail.hidden = false;
+    routesPanel.hidden = false;
+
+    routesDetail.querySelectorAll("[data-place]").forEach((el) => {
+      el.addEventListener("click", () => openPlaceCard(el.dataset.place));
+    });
+  }
+
+  btnRoutes.addEventListener("click", () => {
+    if (!routesPanel.hidden) {
+      routesPanel.hidden = true;
+      drawMultidayLine([]);
+      return;
+    }
+    loadMultiRoutes();
+  });
+
+  document.getElementById("routes-close").addEventListener("click", () => {
+    routesPanel.hidden = true;
+    drawMultidayLine([]);
+  });
+
   /* ---------- вспомогательное ---------- */
   function parseStrings() {
     const node = document.getElementById("i18n-strings");

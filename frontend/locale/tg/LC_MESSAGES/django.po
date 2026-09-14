@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kuhiston 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-14 23:48+0500\n"
+"POT-Creation-Date: 2026-09-14 23:53+0500\n"
 "PO-Revision-Date: 2026-09-14\n"
 "Last-Translator: Kuhiston team <noreply@kuhiston.local>\n"
 "Language-Team: Tajik <noreply@kuhiston.local>\n"
@@ -19,7 +19,7 @@ msgstr ""
 msgid "Определить моё местоположение"
 msgstr "Ҷойи манро муайян кун"
 
-#: backend/places/views.py:24 frontend/templates/home.html:31
+#: backend/places/views.py:24 frontend/templates/home.html:32
 msgid "Точка выбрана — нажмите ещё раз, чтобы убрать"
 msgstr "Нуқта интихоб шуд — барои тоза кардан боз зер кунед"
 
@@ -81,6 +81,22 @@ msgstr "Дар наздикӣ ҷойҳо нестанд"
 msgid "км"
 msgstr "км"
 
+#: backend/places/views.py:39
+msgid "дн."
+msgstr "рӯз"
+
+#: backend/places/views.py:40
+msgid "точек"
+msgstr "нуқта"
+
+#: backend/places/views.py:41
+msgid "День"
+msgstr "Рӯз"
+
+#: backend/places/views.py:42
+msgid "мин"
+msgstr "дақ"
+
 #: frontend/templates/home.html:3
 msgid "Карта мест"
 msgstr "Харитаи ҷойҳо"
@@ -98,11 +114,15 @@ msgstr "Ҳама"
 msgid "Маршрут"
 msgstr "Масъир"
 
-#: frontend/templates/home.html:28
+#: frontend/templates/home.html:28 frontend/templates/home.html:36
+msgid "Готовые маршруты"
+msgstr "Масъирҳои омода"
+
+#: frontend/templates/home.html:29
 msgid "3D-рельеф"
 msgstr "Релефи 3D"
 
-#: frontend/templates/home.html:35
+#: frontend/templates/home.html:43
 msgid "Ближайшие места"
 msgstr "Ҷойҳои наздиктарин"
 

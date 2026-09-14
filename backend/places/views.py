@@ -36,6 +36,10 @@ def home(request):
         "route_total": _("Итого"),
         "route_empty": _("Рядом не найдено мест"),
         "km": _("км"),
+        "days": _("дн."),
+        "points_noun": _("точек"),
+        "day_label": _("День"),
+        "min": _("мин"),
     }
     context = {
         "maptiler_api_key": settings.MAPTILER_API_KEY,

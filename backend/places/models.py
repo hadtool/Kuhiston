@@ -149,6 +149,23 @@ class Place(models.Model):
     def reviews_count(self):
         return self.reviews.count()
 
+    def distance_to(self, other):
+        """Расстояние по прямой (хаверсин) до другого места, в км."""
+        import math
+
+        lat1, lng1 = self.get_coordinates()
+        lat2, lng2 = other.get_coordinates()
+        R = 6371.0
+        dlat = math.radians(lat2 - lat1)
+        dlng = math.radians(lng2 - lng1)
+        a = (
+            math.sin(dlat / 2) ** 2
+            + math.cos(math.radians(lat1))
+            * math.cos(math.radians(lat2))
+            * math.sin(dlng / 2) ** 2
+        )
+        return R * 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
     def __str__(self):
         return self.name_ru
 
