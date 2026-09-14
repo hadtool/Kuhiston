@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
@@ -140,8 +141,60 @@ class Place(models.Model):
     def get_coordinates(self):
         return (float(self.latitude), float(self.longitude))
 
+    @property
+    def average_rating(self):
+        return self.reviews.aggregate(avg=models.Avg("rating"))["avg"]
+
+    @property
+    def reviews_count(self):
+        return self.reviews.count()
+
     def __str__(self):
         return self.name_ru
+
+
+class Review(models.Model):
+    """Отзыв туриста о месте с оценкой 1–5.
+
+    Автор — зарегистрированный пользователь (PROJECT.md раздел 3): регистрация
+    нужна для отзывов. Отображение рейтинга на карточке — Этап 5.
+    """
+
+    place = models.ForeignKey(
+        Place,
+        on_delete=models.CASCADE,
+        related_name="reviews",
+        verbose_name="место",
+    )
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="reviews",
+        verbose_name="автор",
+    )
+    rating = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        verbose_name="оценка (1–5)",
+    )
+    text = models.TextField(blank=True, verbose_name="текст отзыва")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(rating__gte=1, rating__lte=5),
+                name="review_rating_range",
+            )
+        ]
+        verbose_name = "отзыв"
+        verbose_name_plural = "отзывы"
+
+    def __str__(self):
+        return f"{self.place} — {self.rating}/5 ({self.author})"
 
 
 class PlacePhoto(models.Model):
