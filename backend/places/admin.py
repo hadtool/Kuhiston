@@ -56,6 +56,11 @@ class PlaceAdmin(admin.ModelAdmin):
         ("Модерация", {"fields": ("moderation_status", "added_by")}),
     )
 
+    def save_model(self, request, obj, form, change):
+        if not change and not obj.added_by_id:
+            obj.added_by = request.user
+        super().save_model(request, obj, form, change)
+
 
 @admin.register(models.PlacePhoto)
 class PlacePhotoAdmin(admin.ModelAdmin):
