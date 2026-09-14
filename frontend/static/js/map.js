@@ -193,11 +193,15 @@
       <p class="place-card__desc">${escapeHtml(p.description || "")}</p>
       <dl class="place-card__grid">
         ${rows.map((r) => `<dt>${escapeHtml(r.label)}</dt><dd>${escapeHtml(String(r.value))}</dd>`).join("")}
-      </dl>`;
+      </dl>
+      <button class="place-card__nav" id="card-nav">${I18N.nav_btn}</button>`;
     card.hidden = false;
 
     document.getElementById("card-close").addEventListener("click", () => {
       card.hidden = true;
+    });
+    document.getElementById("card-nav").addEventListener("click", () => {
+      loadNavigation(p.lat, p.lng);
     });
   }
 
@@ -422,6 +426,57 @@
   document.getElementById("routes-close").addEventListener("click", () => {
     routesPanel.hidden = true;
     drawMultidayLine([]);
+  });
+
+  /* ---------- навигация по дорогам/тропам через OSRM (Этап 3, задача 3) ---------- */
+  const navPanel = document.getElementById("nav-panel");
+  const navInfo = document.getElementById("nav-info");
+  let navSourceId = null;
+
+  function drawNavLine(coords) {
+    if (navSourceId) {
+      map.removeLayer(navSourceId);
+      map.removeSource(navSourceId);
+      navSourceId = null;
+    }
+    if (!coords.length) return;
+    navSourceId = "nav-line";
+    map.addSource(navSourceId, {
+      type: "geojson",
+      data: { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: coords } },
+    });
+    map.addLayer({
+      id: navSourceId,
+      type: "line",
+      source: navSourceId,
+      layout: { "line-cap": "round", "line-join": "round" },
+      paint: { "line-color": "#24365a", "line-width": 4 },
+    });
+  }
+
+  async function loadNavigation(endLat, endLng) {
+    const origin = state.userPoint || map.getCenter();
+    try {
+      const url = new URL("/api/route/navigation/", window.location.origin);
+      url.searchParams.set("start", `${origin.lat},${origin.lng}`);
+      url.searchParams.set("end", `${endLat},${endLng}`);
+      url.searchParams.set("profile", "driving");
+      const resp = await fetch(url, { headers: { Accept: "application/json" } });
+      if (!resp.ok) throw new Error(resp.status);
+      const data = await resp.json();
+      drawNavLine(data.geometry.coordinates);
+      const fallbackNote = data.source === "fallback" ? ` (${I18N.nav_fallback})` : "";
+      navInfo.innerHTML = `
+        <p><strong>${formatter.format(data.distance_km)} ${I18N.km}</strong> · ${formatter.format(data.duration_min)} ${I18N.min}${escapeHtml(fallbackNote)}</p>`;
+      navPanel.hidden = false;
+    } catch (err) {
+      console.error("loadNavigation:", err);
+    }
+  }
+
+  document.getElementById("nav-close").addEventListener("click", () => {
+    navPanel.hidden = true;
+    drawNavLine([]);
   });
 
   /* ---------- вспомогательное ---------- */

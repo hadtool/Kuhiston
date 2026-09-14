@@ -235,6 +235,30 @@ header#site-header h1 {
   text-transform: uppercase; letter-spacing: 0.04em;
 }
 
+/* навигация по дорогам/тропам — Этап 3, задача 3 */
+.place-card__nav {
+  display: block; width: 100%; margin-top: 12px;
+  padding: 10px 14px;
+  background: var(--ink);
+  color: var(--white);
+  border: 0; border-radius: 10px;
+  cursor: pointer;
+  font: inherit; font-weight: 600;
+}
+.place-card__nav:hover { background: var(--ink-soft); }
+#nav-panel {
+  position: absolute;
+  top: 18px; right: 18px;
+  z-index: 3;
+  width: min(300px, calc(100% - 36px));
+  background: var(--white);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+#nav-info { margin: 0; color: var(--ink); font-size: 0.95rem; }
+#nav-info strong { color: var(--ochre); }
+
 /* карточка места */
 #place-card {
   position: absolute;

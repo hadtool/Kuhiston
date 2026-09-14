@@ -4,6 +4,8 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from kuhiston.routing import haversine_km, osrm_route
+
 from .models import Place, PlaceCategory
 from .serializers import (
     PlaceCategorySerializer,
@@ -136,3 +138,28 @@ class SimpleRouteView(APIView):
                 "points": serializer.data,
             }
         )
+
+
+class NavigationRouteView(APIView):
+    """Маршрут по дорогам/тропам от точки отправления до точки назначения.
+
+    Query: start=lat,lng, end=lat,lng, profile (driving|foot|bike, по умолчанию driving).
+    Ответ содержит distance_km, duration_min, geometry (GeoJSON LineString) и
+    source ("osrm" — маршрут по OSM-данным, "fallback" — по прямой, если OSRM недоступен).
+    """
+
+    def get(self, request):
+        start = request.query_params.get("start")
+        end = request.query_params.get("end")
+        if not start or not end:
+            return Response({"error": "start and end (lat,lng) are required"}, status=400)
+        try:
+            s = tuple(float(x) for x in start.split(","))
+            e = tuple(float(x) for x in end.split(","))
+            if len(s) != 2 or len(e) != 2:
+                raise ValueError
+        except ValueError:
+            return Response({"error": "invalid start/end coordinates"}, status=400)
+
+        profile = request.query_params.get("profile", "driving")
+        return Response(osrm_route(s, e, profile))

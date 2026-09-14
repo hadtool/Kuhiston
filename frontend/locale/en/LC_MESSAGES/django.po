@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kuhiston 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-14 23:53+0500\n"
+"POT-Creation-Date: 2026-09-14 23:56+0500\n"
 "PO-Revision-Date: 2026-09-14\n"
 "Last-Translator: Kuhiston team <noreply@kuhiston.local>\n"
 "Language-Team: English <noreply@kuhiston.local>\n"
@@ -97,6 +97,24 @@ msgstr "Day"
 msgid "мин"
 msgstr "min"
 
+#: backend/places/views.py:43
+#, fuzzy
+#| msgid "Готовые маршруты"
+msgid "Построить маршрут"
+msgstr "Guided routes"
+
+#: backend/places/views.py:44
+msgid "Расстояние"
+msgstr "Distance"
+
+#: backend/places/views.py:45
+msgid "Время"
+msgstr "Time"
+
+#: backend/places/views.py:46
+msgid "Маршрут по прямой (сервис недоступен)"
+msgstr "Straight-line route (service unavailable)"
+
 #: frontend/templates/home.html:3
 msgid "Карта мест"
 msgstr "Map of places"
@@ -109,7 +127,7 @@ msgstr "Map not configured: MapTiler key is missing in settings."
 msgid "Все"
 msgstr "All"
 
-#: frontend/templates/home.html:27
+#: frontend/templates/home.html:27 frontend/templates/home.html:50
 msgid "Маршрут"
 msgstr "Route"
 

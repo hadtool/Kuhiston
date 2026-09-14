@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kuhiston 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-14 23:53+0500\n"
+"POT-Creation-Date: 2026-09-14 23:56+0500\n"
 "PO-Revision-Date: 2026-09-14\n"
 "Last-Translator: Kuhiston team <noreply@kuhiston.local>\n"
 "Language-Team: Tajik <noreply@kuhiston.local>\n"
@@ -97,6 +97,24 @@ msgstr "Рӯз"
 msgid "мин"
 msgstr "дақ"
 
+#: backend/places/views.py:43
+#, fuzzy
+#| msgid "Готовые маршруты"
+msgid "Построить маршрут"
+msgstr "Масъирҳои омода"
+
+#: backend/places/views.py:44
+msgid "Расстояние"
+msgstr "Масофа"
+
+#: backend/places/views.py:45
+msgid "Время"
+msgstr "Вақт"
+
+#: backend/places/views.py:46
+msgid "Маршрут по прямой (сервис недоступен)"
+msgstr "Роҳи рост (хизмат дастнорас аст)"
+
 #: frontend/templates/home.html:3
 msgid "Карта мест"
 msgstr "Харитаи ҷойҳо"
@@ -110,7 +128,7 @@ msgstr ""
 msgid "Все"
 msgstr "Ҳама"
 
-#: frontend/templates/home.html:27
+#: frontend/templates/home.html:27 frontend/templates/home.html:50
 msgid "Маршрут"
 msgstr "Масъир"
 

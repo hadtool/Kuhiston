@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/places/', api.PlaceListView.as_view(), name='api-places-list'),
     path('api/places/<int:pk>/', api.PlaceDetailView.as_view(), name='api-places-detail'),
     path('api/route/simple/', api.SimpleRouteView.as_view(), name='api-route-simple'),
+    path('api/route/navigation/', api.NavigationRouteView.as_view(), name='api-route-navigation'),
     path('api/routes/', routes_api.RouteListView.as_view(), name='api-routes-list'),
     path('api/routes/<int:pk>/', routes_api.RouteDetailView.as_view(), name='api-routes-detail'),
     path('api/categories/', api.CategoryListView.as_view(), name='api-categories'),

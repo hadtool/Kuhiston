@@ -67,6 +67,15 @@
 **Не сделано / отложено:**
 - Задача 3 (навигация по дорогам/тропам через OSRM) Этапа 3 — следующая сессия; выбор OSRM vs готовый сервис — открытый вопрос ISSUES.
 
+**Сделано (задача 3 «Навигация по дорогам/тропам (OSRM)»):**
+- Решение в DECISIONS.md: на MVP — публичный OSRM-демо-сервер (`router.project-osrm.org`, данные OSM) через серверный прокси (нет CORS/ключей у фронта); при недоступности — автоматический фолбэк по прямой (хаверсин × 1.3). Self-hosted OSRM (docker + OSM по Таджикистану) — продакшн-задача на машине основателя (зафиксировано в ISSUES.md).
+- `backend/kuhiston/routing.py::osrm_route(start, end, profile)` (driving/foot/bike, urllib без requests, таймаут 6с): возвращает distance_km/duration_min/geometry(GeoJSON)/source("osrm"|"fallback"); никогда не бросает исключений.
+- `backend/places/api.py::NavigationRouteView` — `GET /api/route/navigation/?start=lat,lng&end=lat,lng&profile=driving` (400 без/с битыми координатами).
+- Фронтенд: кнопка «🚗 Построить маршрут» в карточке места (`#card-nav`) → полилиния маршрута (индиго) + панель `#nav-panel` с дистанцией/временем и пометкой «маршрут по прямой» при фолбэке.
+- Проверено на Postgres: `/api/route/navigation/` возвращает OSRM-маршрут (source: osrm, 7.0 км, 12 мин) — сеть из песочницы доступна; 400 для пустых/битых координат; `/` рендерится с `nav-panel`. `manage.py check`/`makemigrations --check` чисто. Переводы 3 новых строк в ru/en/tg.
+
+**Сделано (задачи 1–3 Этапа 3):** Этап 3 закрыт полностью.
+
 **Заметки для следующей сессии:**
 - В `api.py` рядом с generics-вьюхами теперь есть `APIView` — аккуратно с импортами.
 - Полилиния маршрута пересоздаёт source/layer при повторном построении (уже обработано в `renderRoute`). 

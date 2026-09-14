@@ -40,6 +40,10 @@ def home(request):
         "points_noun": _("точек"),
         "day_label": _("День"),
         "min": _("мин"),
+        "nav_btn": _("Построить маршрут"),
+        "nav_distance": _("Расстояние"),
+        "nav_duration": _("Время"),
+        "nav_fallback": _("Маршрут по прямой (сервис недоступен)"),
     }
     context = {
         "maptiler_api_key": settings.MAPTILER_API_KEY,

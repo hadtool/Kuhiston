@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kuhiston 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-14 23:53+0500\n"
+"POT-Creation-Date: 2026-09-14 23:56+0500\n"
 "PO-Revision-Date: 2026-09-14\n"
 "Last-Translator: Kuhiston team <noreply@kuhiston.local>\n"
 "Language-Team: Russian <noreply@kuhiston.local>\n"
@@ -98,6 +98,24 @@ msgstr "День"
 msgid "мин"
 msgstr "мин"
 
+#: backend/places/views.py:43
+#, fuzzy
+#| msgid "Готовые маршруты"
+msgid "Построить маршрут"
+msgstr "Готовые маршруты"
+
+#: backend/places/views.py:44
+msgid "Расстояние"
+msgstr "Расстояние"
+
+#: backend/places/views.py:45
+msgid "Время"
+msgstr "Время"
+
+#: backend/places/views.py:46
+msgid "Маршрут по прямой (сервис недоступен)"
+msgstr "Маршрут по прямой (сервис недоступен)"
+
 #: frontend/templates/home.html:3
 msgid "Карта мест"
 msgstr "Карта мест"
@@ -110,7 +128,7 @@ msgstr "Карта ещё не подключена: не задан ключ Ma
 msgid "Все"
 msgstr "Все"
 
-#: frontend/templates/home.html:27
+#: frontend/templates/home.html:27 frontend/templates/home.html:50
 msgid "Маршрут"
 msgstr "Маршрут"
 
