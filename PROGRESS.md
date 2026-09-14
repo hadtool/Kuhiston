@@ -13,6 +13,30 @@
 
 ---
 
+## Сессия 2 — 2026-09-14
+**План:**
+- Задача Этапа 0: «Настроить PostgreSQL + PostGIS локально и в выбранном бесплатном хостинге».
+- Решить блокирующий вопрос из ISSUES.md про выбор хостинга.
+- Поднять реальный PostgreSQL в песочнице (портативные бинарники) и проверить, что Django мигрирует на него через `DATABASE_URL`.
+- Приготовить локальный PostGIS через docker-compose и настроить Django на PostGIS-движок.
+- Следующая задача Этапа 0: переменные окружения (.env, MapTiler ключ — без хардкода).
+
+**Сделано:**
+- Выбор хостинга зафиксирован в DECISIONS.md, вопрос в ISSUES.md закрыт (Neon Free для БД, Render Free для приложения).
+- Установлен и проверен реальный PostgreSQL 17.11 в песочнице: Django 6.1 подключён через `DATABASE_URL`, все встроенные миграции применены, таблицы созданы.
+- `docker-compose.yml` — локальный PostGIS (`postgis/postgis:16-3.4`).
+- `settings.py`: поддержка `DATABASE_URL` (dj-database-url), движок postgis — флагом `USE_POSTGIS_BACKEND=1`, без GEOS/GDAL приложение стартует на обычном postgres-движке.
+- `.env.example` обновлён под Postgres.
+- **Переменные окружения (следующая задача Этапа 0):** подключено `python-dotenv`, `backend/.env` (gitignored) автоматически загружается; `MAPTILER_API_KEY`, `DJANGO_SECRET_KEY`, `DEBUG`, `ALLOWED_HOSTS`, БД — только из окружения. Проверено: grep'ом в backend нет захардкоженных ключей; `.env` реально читается (`DEBUG`/`KEY`/`DB engine` из окружения); `runserver` отвечает HTTP 200 на sqlite-fallback. В ISSUES.md добавлено предупреждение о ротации ключа из `tajikistan-map-3d.html` перед публикацией.
+
+**Не сделано / отложено:**
+- Живая проверка PostGIS-расширения в БД и PostGIS-движка Django невозможна в песочнице: нет GEOS/GDAL/PostGIS-бинарников (и нет apt/docker/gcc). Это требует машины основателя (docker compose) или Neon-БД. Ограничение записано в DECISIONS.md.
+- Аккаунт Neon/Render и реальный `DATABASE_URL` от основателя — чтобы доподлинно проверить хостинг. Задача «PostgreSQL+PostGIS» остаётся `[ ]` в TASKS.md до финальной проверки PostGIS на машине/хостинге.
+
+**Заметки для следующей сессии:** PostGIS-движок Django и приложение `django.contrib.gis` НЕ включаются без GEOS+GDAL (иначе `ImproperlyConfigured: Could not find the GDAL library`) — см. DECISIONS.md. Проверка Django↔Postgres в песочнице делалась портативными бинарниками postgres 17.11 (Zonky/maven), PostGIS в них нет. Следующая задача — «Настроить i18n-инфраструктуру для трёх языков (ru/en/tg)».
+
+---
+
 ## Сессия 1 — 2026-09-13
 **План:**
 - Зафиксировать выбор бэкенда (Django vs FastAPI), закрыть вопрос в ISSUES.md.

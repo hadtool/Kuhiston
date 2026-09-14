@@ -1,0 +1,20 @@
+# Локальная разработка: PostgreSQL 16 + PostGIS 3.4
+# Запуск: docker compose up -d
+# Остановка: docker compose down
+# Полная очистка данных: docker compose down -v
+
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_DB: ${DB_NAME:-kuhiston}
+      POSTGRES_USER: ${DB_USER:-kuhiston}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-kuhiston}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

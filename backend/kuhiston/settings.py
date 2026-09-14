@@ -13,11 +13,18 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 import os
 from pathlib import Path
 
+import dj_database_url
+from dotenv import load_dotenv
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Root of the whole project (backend/..) — used to reach the frontend folder.
 PROJECT_ROOT = BASE_DIR.parent
+
+# Все секреты — из .env (backend/.env, в git не хранится). Реальные env-переменные
+# окружения имеют приоритет над значениями из файла.
+load_dotenv(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
@@ -81,18 +88,28 @@ WSGI_APPLICATION = 'kuhiston.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
-# Local dev uses SQLite by default; production uses PostgreSQL + PostGIS
-# (engine configured in the PostgreSQL+PostGIS setup task). Everything via env vars.
-DATABASES = {
-    'default': {
-        'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.sqlite3'),
-        'NAME': os.environ.get('DB_NAME', BASE_DIR / 'db.sqlite3'),
-        'USER': os.environ.get('DB_USER', ''),
-        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
-        'HOST': os.environ.get('DB_HOST', ''),
-        'PORT': os.environ.get('DB_PORT', ''),
+# Правда проекта — PostgreSQL + PostGIS.
+# 1. DATABASE_URL задан → стандартный postgresql-движок (работает без GEOS/GDAL).
+# 2. DATABASE_URL задан + USE_POSTGIS_BACKEND=1 → PostGIS-движок (нужны GEOS + GDAL на сервере).
+# 3. Без DATABASE_URL → SQLite-заглушка для быстрой разработки без сервера.
+_database_url = os.environ.get('DATABASE_URL')
+if _database_url:
+    DATABASES = {
+        'default': dj_database_url.config(default=_database_url, conn_max_age=600),
     }
-}
+    if os.environ.get('USE_POSTGIS_BACKEND', '0') == '1':
+        DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.sqlite3'),
+            'NAME': os.environ.get('DB_NAME', BASE_DIR / 'db.sqlite3'),
+            'USER': os.environ.get('DB_USER', ''),
+            'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+            'HOST': os.environ.get('DB_HOST', ''),
+            'PORT': os.environ.get('DB_PORT', ''),
+        }
+    }
 
 
 # Password validation
@@ -145,6 +162,11 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     PROJECT_ROOT / 'frontend' / 'static',
 ]
+
+
+# Карта (MapTiler)
+# Ключ выдаётся основателем отдельно, хранится только в .env / переменной окружения.
+MAPTILER_API_KEY = os.environ.get('MAPTILER_API_KEY', '')
 
 
 # Email
