@@ -33,7 +33,11 @@
 - Живая проверка PostGIS-расширения в БД и PostGIS-движка Django невозможна в песочнице: нет GEOS/GDAL/PostGIS-бинарников (и нет apt/docker/gcc). Это требует машины основателя (docker compose) или Neon-БД. Ограничение записано в DECISIONS.md.
 - Аккаунт Neon/Render и реальный `DATABASE_URL` от основателя — чтобы доподлинно проверить хостинг. Задача «PostgreSQL+PostGIS» остаётся `[ ]` в TASKS.md до финальной проверки PostGIS на машине/хостинге.
 
-**Заметки для следующей сессии:** PostGIS-движок Django и приложение `django.contrib.gis` НЕ включаются без GEOS+GDAL (иначе `ImproperlyConfigured: Could not find the GDAL library`) — см. DECISIONS.md. Проверка Django↔Postgres в песочнице делалась портативными бинарниками postgres 17.11 (Zonky/maven), PostGIS в них нет. Следующая задача — «Настроить i18n-инфраструктуру для трёх языков (ru/en/tg)».
+**Сделано дополнительно (i18n и бренд, тоже Этап 0):**
+- **i18n:** добавлен `LocaleMiddleware`, context processor `django.template.context_processors.i18n`, маршрут `/i18n/setlang/`. Созданы `frontend/locale/{ru,en,tg}/LC_MESSAGES/django.po` + скомпилированы `.mo`; `frontend/templates/base.html` — базовый шаблон с переключателем языка. Проверено: `gettext` отдаёт правильные переводы для ru/en/tg. `makemessages` сканирует только текущий каталог — прогонять его из `frontend/templates` (`manage.py makemessages -l ru -l en -l tg --extension html`).
+- **Бренд:** `backend/kuhiston/brand.py` — единственное место с названием (`APP_NAME="Kuhiston"`) и локализованными слоганами (`APP_TAGLINE`); context processor раздаёт их в шаблоны. `base.html` использует `{{ brand_name }}`/`{{ brand_tagline }}`, больше нигде название не хардкодится. Проверено рендером с языком tg.
+
+**Заметки для следующей сессии:** Этап 0 почти полностью закрыт. Следующие задачи — Этап 1 «Модель данных и админка/волонтёрская панель». Перед моделью "Место" не забыть ограничение про PostGIS/GEOS-GDAL (см. DECISIONS.md): пространственные поля (PointField) заработают только с PostGIS-движком и GEOS/GDAL. Проверка Django↔Postgres в песочнице делалась портативными бинарниками postgres 17.11 (Zonky/maven, лежат в maven central `io/zonky/test/postgres/embedded-postgres-binaries-linux-amd64`), PostGIS в них нет.
 
 ---
 

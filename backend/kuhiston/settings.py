@@ -58,6 +58,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -66,6 +67,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'kuhiston.urls'
+
+# Название продукта — в одном месте (kuhiston/brand.py), легко заменить.
+from kuhiston.brand import APP_NAME as BRAND_APP_NAME  # noqa: E402
 
 TEMPLATES = [
     {
@@ -77,6 +81,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n',
+                'kuhiston.context_processors.brand_context_processor',
             ],
         },
     },

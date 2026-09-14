@@ -1,0 +1,30 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+<meta charset="UTF-8">
+<title>{% block title %}{{ brand_name }}{% endblock %}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<header>
+  <h1>{{ brand_name }}</h1>
+  <p>{{ brand_tagline }}</p>
+  <form action="{% url 'set_language' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ request.path }}">
+    <select name="language" onchange="this.form.submit()">
+      {% get_current_language as CURRENT_LANGUAGE %}
+      {% get_available_languages as AVAILABLE_LANGUAGES %}
+      {% get_language_info_list for AVAILABLE_LANGUAGES as languages %}
+      {% for language in languages %}
+      <option value="{{ language.code }}" {% if language.code == CURRENT_LANGUAGE %}selected{% endif %}>
+        {{ language.name_local }}
+      </option>
+      {% endfor %}
+    </select>
+  </form>
+</header>
+<main>{% block content %}{% endblock %}</main>
+</body>
+</html>

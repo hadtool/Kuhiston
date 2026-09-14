@@ -1,0 +1,19 @@
+# Translation for English (en)
+# Copyright (C) 2026 Kuhiston contributors
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kuhiston 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-14 16:59+0500\n"
+"PO-Revision-Date: 2026-09-14\n"
+"Last-Translator: Kuhiston team <noreply@kuhiston.local>\n"
+"Language-Team: English <noreply@kuhiston.local>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: base.html:12
+msgid "Туристическое приложение по Таджикистану"
+msgstr "Tourism app for Tajikistan"
