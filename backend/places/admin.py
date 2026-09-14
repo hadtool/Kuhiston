@@ -1,5 +1,7 @@
 from django.contrib import admin
 
+from kuhiston.moderation import check_place
+
 from . import models
 
 
@@ -59,6 +61,9 @@ class PlaceAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if not change and not obj.added_by_id:
             obj.added_by = request.user
+        # Лёгкая модерация: если в текстах найдены запрещённые слова — отклоняем.
+        if check_place(obj):
+            obj.moderation_status = models.Place.ModerationStatus.REJECTED
         super().save_model(request, obj, form, change)
 
 
