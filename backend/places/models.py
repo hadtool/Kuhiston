@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 
@@ -114,7 +115,7 @@ class Place(models.Model):
         verbose_name="статус модерации",
     )
     added_by = models.ForeignKey(
-        "auth.User",
+        settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,

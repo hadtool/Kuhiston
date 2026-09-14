@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'users',
     'places',
 ]
 
@@ -68,6 +69,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'kuhiston.urls'
+
+# Кастомная модель пользователя с ролями (турист/волонтёр/владелец места/админ).
+AUTH_USER_MODEL = 'users.User'
 
 # Название продукта — в одном месте (kuhiston/brand.py), легко заменить.
 from kuhiston.brand import APP_NAME as BRAND_APP_NAME  # noqa: E402
