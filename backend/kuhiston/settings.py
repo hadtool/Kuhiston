@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'places',
 ]
 
 MIDDLEWARE = [
@@ -168,6 +169,10 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     PROJECT_ROOT / 'frontend' / 'static',
 ]
+
+# Загруженные файлы (фотографии мест) — на фронтенде в dev режиме.
+MEDIA_URL = '/media/'
+MEDIA_ROOT = PROJECT_ROOT / 'frontend' / 'media'
 
 
 # Карта (MapTiler)
