@@ -19,7 +19,13 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
+from places import views, api
+
 urlpatterns = [
+    path('', views.home, name='home'),
+    path('api/places/', api.PlaceListView.as_view(), name='api-places-list'),
+    path('api/places/<int:pk>/', api.PlaceDetailView.as_view(), name='api-places-detail'),
+    path('api/categories/', api.CategoryListView.as_view(), name='api-categories'),
     path('admin/', admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),
 ]

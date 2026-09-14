@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kuhiston 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-14 16:59+0500\n"
+"POT-Creation-Date: 2026-09-14 23:39+0500\n"
 "PO-Revision-Date: 2026-09-14\n"
 "Last-Translator: Kuhiston team <noreply@kuhiston.local>\n"
 "Language-Team: English <noreply@kuhiston.local>\n"
@@ -14,6 +14,70 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-#: base.html:12
-msgid "Туристическое приложение по Таджикистану"
-msgstr "Tourism app for Tajikistan"
+
+#: backend/places/views.py:23 frontend/templates/home.html:26
+msgid "Определить моё местоположение"
+msgstr "Find my location"
+
+#: backend/places/views.py:24 frontend/templates/home.html:30
+msgid "Точка выбрана — нажмите ещё раз, чтобы убрать"
+msgstr "Point selected — click again to remove"
+
+#: backend/places/views.py:25
+msgid "Загрузка…"
+msgstr "Loading…"
+
+#: backend/places/views.py:26
+msgid "Рядом пока нет мест"
+msgstr "No places nearby"
+
+#: backend/places/views.py:27
+msgid "Не удалось получить данные"
+msgstr "Could not load data"
+
+#: backend/places/views.py:28
+msgid "Закрыть"
+msgstr "Close"
+
+#: backend/places/views.py:29
+msgid "Сложность доступа"
+msgstr "Access difficulty"
+
+#: backend/places/views.py:30
+msgid "Часы работы"
+msgstr "Opening hours"
+
+#: backend/places/views.py:31
+msgid "Входная цена"
+msgstr "Entrance fee"
+
+#: backend/places/views.py:32
+msgid "Рекомендуемое время"
+msgstr "Recommended season"
+
+#: backend/places/views.py:33
+msgid "Регион"
+msgstr "Region"
+
+#: backend/places/views.py:34
+msgid "сомони"
+msgstr "somoni"
+
+#: frontend/templates/home.html:3
+msgid "Карта мест"
+msgstr "Map of places"
+
+#: frontend/templates/home.html:15
+msgid "Карта ещё не подключена: не задан ключ MapTiler в настройках."
+msgstr "Map not configured: MapTiler key is missing in settings."
+
+#: frontend/templates/home.html:19
+msgid "Все"
+msgstr "All"
+
+#: frontend/templates/home.html:27
+msgid "3D-рельеф"
+msgstr "3D terrain"
+
+#~ msgid "Туристическое приложение по Таджикистану"
+#~ msgstr "Tourism app for Tajikistan"

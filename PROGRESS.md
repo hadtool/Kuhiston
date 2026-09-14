@@ -13,6 +13,33 @@
 
 ---
 
+## Сессия 10 — 2026-09-14
+**План:**
+- Этап 2, задача 1: «Интеграция MapTiler на фронтенде (2D режим, живой стиль)» — PROJECT.md раздел 9.
+- Создать view главной страницы (карта), шаблон `home.html` на базе `base.html`, статику (css/js). Инициализация MapTiler SDK JS (MapLibre-основа, тут же задел под 3D-террейн из следующей задачи) со стилем Streets и API-ключом из настроек (не в коде).
+- Проверить: страница рендерится (GET 200), ключ и скрипты подставляются, язык интерфейса переключается.
+- Задача 2: «Определение местоположения пользователя + ручной выбор точки» — кнопка геолокации и клик по карте для выбора точки (2D).
+
+**Сделано:**
+- Весь Этап 2 (задачи 1–5): страница-карта, геолокация + ручная точка, ближайшие места с фильтром по категориям, карточка места, 3D-рельеф.
+- Фронтенд: `frontend/templates/home.html` (extends base.html; `<div id="map">` с `data-maptiler-key` из `settings.MAPTILER_API_KEY`; чипы категорий; кнопки «локация» и «3D-рельеф»; подсказка точки; сайдбар-карточка; `js_strings|json_script:"i18n-strings"`; MapTiler SDK UMD 1.2.0 с jsdelivr — ключ не хардкодится); `frontend/static/css/map.css` (палитра индиго+охра, чипы, сцены, карточка, маркер `.place-dot`); `frontend/static/js/map.js` (init `maptilersdk.MapStyle.STREETS`; `loadGeolocate`; ручной выбор точки кликом; `loadPlaces` с фильтром категории; `openPlaceCard`; `toggle3D` через `setTerrain`/exaggeration; парсинг i18n-строк; `formatRating`/`escapeHtml`).
+- Backend: `places/views.py::home` — отдаёт ключ, категории и `js_strings` на активном языке; `place-dot`-маркер и стили; `backend/kuhiston/settings.py`: разрешён `testserver` в ALLOWED_HOSTS в DEBUG.
+- API (нужно для задач 3–4): `backend/places/api.py` — `PlaceListView` (`/api/places/`: только `published`, фильтр `?category=<code>`, сортировка haversine по `?lat&lng`, `distance_km`, рейтинг), `PlaceDetailView` (`/api/places/<id>/`: все поля на языке запроса, `photos[]` с абсолютными URL, средний рейтинг, `reviews_count`, `distance_km`), `CategoryListView` (`/api/categories/`); `backend/places/serializers.py` (список/деталь/категория/фото, языки через контекст); маршруты в `backend/kuhiston/urls.py`.
+- Проверено (Postgres, опубликованы демо-места 1,2,3,4,5,6,8): `GET /` = 200, есть `id="map"`, `data-maptiler-key`, чипы; `/api/places/` = 200 (7 мест), сортировка по расстоянию корректна, фильтр по категории работает; `/api/places/<id>/` = 200 (все поля, photos, reviews_count). Языки: чипы и js_strings переключаются ru/en/tg (EN: «Find my location», TG: «Ҷойи манро муайян кун»).
+- Переводы: добавлены 16 строк home.html + js_strings в `frontend/locale/{ru,en,tg}` (ru — как есть, en/tg переведены), `compilemessages` выполнен. Нюанс: `makemessages` сканирует только текущий каталог — запускать из корня проекта с `--extension html --extension py`, чтобы попадали и Python-строки views.py.
+- Исправлен баг DRF: поле `reviews_count` с `source='reviews_count'` — AssertionError (redundant source), убрано явное объявление (маппится на property модели).
+- `manage.py check` (обе БД, 0 silenced), `makemigrations --check` без изменений.
+
+**Не сделано / отложено:**
+- Живой рендер карты и 3D в браузере и реальную геолокацию в песочнице не проверить (нет браузера) — проверено: разметка, статусы API, наличие ключа. Для живой карты нужен настоящий `MAPTILER_API_KEY` от основателя (ISSUES открыта).
+
+**Заметки для следующей сессии:**
+- Этап 2 закрыт полностью (5/5). Дальше — Этап 3 «Маршруты»: простые маршруты (список/показ N ближайших точек), готовые многодневные маршруты (модель данных + отображение по дням), навигация по дорогам/тропам (роутинг-движок OSRM — см. ISSUES).
+- Проверки: sqlite (`DATABASE_URL=`) или Postgres (`DATABASE_URL=postgres://postgres@127.0.0.1:5432/kuhiston`), Postgres запущен в `/tmp/opencode/pgdata`. Демо-места опубликованы (1,2,3,4,5,6,8) — API отдаёт их.
+- API-эндпоинты карты: `/api/places/` (+ `?lat&lng&category`), `/api/places/<id>/`, `/api/categories/`. 
+
+---
+
 ## Сессия 9 — 2026-09-14
 **План:**
 - Задача Этапа 1: «Лёгкая модерация: список запрещённых слов (ru/en/tg), статус "на проверке/опубликовано/отклонено"».

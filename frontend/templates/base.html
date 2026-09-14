@@ -5,12 +5,15 @@
 <meta charset="UTF-8">
 <title>{% block title %}{{ brand_name }}{% endblock %}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block extra_head %}{% endblock %}
 </head>
 <body>
-<header>
-  <h1>{{ brand_name }}</h1>
-  <p>{{ brand_tagline }}</p>
-  <form action="{% url 'set_language' %}" method="post">
+<header id="site-header">
+  <div>
+    <h1>{{ brand_name }}</h1>
+    <p class="brand-tagline">{{ brand_tagline }}</p>
+  </div>
+  <form class="lang-form" action="{% url 'set_language' %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="next" value="{{ request.path }}">
     <select name="language" onchange="this.form.submit()">

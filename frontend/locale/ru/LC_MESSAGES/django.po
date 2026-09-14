@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kuhiston 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-14 16:59+0500\n"
+"POT-Creation-Date: 2026-09-14 23:39+0500\n"
 "PO-Revision-Date: 2026-09-14\n"
 "Last-Translator: Kuhiston team <noreply@kuhiston.local>\n"
 "Language-Team: Russian <noreply@kuhiston.local>\n"
@@ -13,7 +13,72 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-#: base.html:12
-msgid "Туристическое приложение по Таджикистану"
-msgstr "Туристическое приложение по Таджикистану"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: backend/places/views.py:23 frontend/templates/home.html:26
+msgid "Определить моё местоположение"
+msgstr "Определить моё местоположение"
+
+#: backend/places/views.py:24 frontend/templates/home.html:30
+msgid "Точка выбрана — нажмите ещё раз, чтобы убрать"
+msgstr "Точка выбрана — нажмите ещё раз, чтобы убрать"
+
+#: backend/places/views.py:25
+msgid "Загрузка…"
+msgstr "Загрузка…"
+
+#: backend/places/views.py:26
+msgid "Рядом пока нет мест"
+msgstr "Рядом пока нет мест"
+
+#: backend/places/views.py:27
+msgid "Не удалось получить данные"
+msgstr "Не удалось получить данные"
+
+#: backend/places/views.py:28
+msgid "Закрыть"
+msgstr "Закрыть"
+
+#: backend/places/views.py:29
+msgid "Сложность доступа"
+msgstr "Сложность доступа"
+
+#: backend/places/views.py:30
+msgid "Часы работы"
+msgstr "Часы работы"
+
+#: backend/places/views.py:31
+msgid "Входная цена"
+msgstr "Входная цена"
+
+#: backend/places/views.py:32
+msgid "Рекомендуемое время"
+msgstr "Рекомендуемое время"
+
+#: backend/places/views.py:33
+msgid "Регион"
+msgstr "Регион"
+
+#: backend/places/views.py:34
+msgid "сомони"
+msgstr "сомони"
+
+#: frontend/templates/home.html:3
+msgid "Карта мест"
+msgstr "Карта мест"
+
+#: frontend/templates/home.html:15
+msgid "Карта ещё не подключена: не задан ключ MapTiler в настройках."
+msgstr "Карта ещё не подключена: не задан ключ MapTiler в настройках."
+
+#: frontend/templates/home.html:19
+msgid "Все"
+msgstr "Все"
+
+#: frontend/templates/home.html:27
+msgid "3D-рельеф"
+msgstr "3D-рельеф"
+
+#~ msgid "Туристическое приложение по Таджикистану"
+#~ msgstr "Туристическое приложение по Таджикистану"

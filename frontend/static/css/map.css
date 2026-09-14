@@ -1,0 +1,245 @@
+:root {
+  --ink: #1a2740;          /* тёмно-индиго */
+  --ink-soft: #24365a;     /* индиго смягчённый */
+  --ochre: #c98a2c;        /* охра */
+  --ochre-light: #dba24f;  /* охра светлая */
+  --paper: #fbf7ef;        /* тёплый фон */
+  --muted: #5a6478;        /* приглушённый текст */
+  --white: #ffffff;
+  --shadow: 0 4px 16px rgba(26, 39, 64, 0.25);
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--ink);
+}
+
+body { display: flex; flex-direction: column; }
+
+header#site-header {
+  position: fixed;
+  z-index: 600;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 14px;
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: var(--shadow);
+}
+
+header#site-header h1 {
+  margin: 0;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.25rem;
+  letter-spacing: 0.02em;
+}
+
+.brand-tagline {
+  margin: 0;
+  font-size: 0.72rem;
+  color: var(--ochre-light);
+}
+
+.lang-form select {
+  background: var(--ink-soft);
+  color: var(--paper);
+  border: 1px solid var(--ochre);
+  border-radius: 8px;
+  padding: 5px 8px;
+  font-size: 0.85rem;
+}
+
+#map-page {
+  position: relative;
+  flex: 1;
+  min-height: 100vh;
+  padding-top: 64px; /* высота шапки */
+}
+
+#map {
+  position: absolute;
+  inset: 64px 0 0 0;
+}
+
+#map-notice {
+  position: absolute;
+  z-index: 100;
+  top: 84px; left: 50%;
+  transform: translateX(-50%);
+  max-width: 90%;
+  padding: 10px 16px;
+  background: var(--paper);
+  border: 1px solid var(--ochre);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  font-size: 0.9rem;
+}
+
+/* панель с фильтрами категорий */
+#category-bar {
+  position: absolute;
+  z-index: 400;
+  top: 78px; right: 10px; left: 10px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.chip {
+  flex: 0 0 auto;
+  padding: 7px 14px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--ink);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.chip:hover { border-color: var(--ochre); }
+
+.chip.active {
+  background: var(--ochre);
+  border-color: var(--ochre);
+  color: var(--white);
+}
+
+/* кнопки сцены */
+#scene-actions {
+  position: absolute;
+  z-index: 400;
+  right: 10px;
+  bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#scene-actions button {
+  width: 44px; height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--white);
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+
+#scene-actions button.active { background: var(--ochre); }
+
+#user-marker-hint {
+  position: absolute;
+  z-index: 400;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  padding: 7px 14px;
+  background: var(--white);
+  border: 1px solid var(--ochre);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+/* легенда подсказки */
+.maplibregl-ctrl-attrib { font-size: 10px; }
+
+/* маркер места на карте */
+.place-dot {
+  width: 30px; height: 30px;
+  border: 2px solid var(--white);
+  border-radius: 50%;
+  background: var(--ochre);
+  color: var(--white);
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  display: grid;
+  place-items: center;
+}
+
+.place-dot:hover { background: var(--ochre-light); }
+
+/* карточка места */
+#place-card {
+  position: absolute;
+  z-index: 500;
+  left: 10px; right: 10px; bottom: 10px;
+  max-height: 62%;
+  overflow-y: auto;
+  background: var(--paper);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.place-card__name {
+  margin: 0 0 4px;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.3rem;
+  color: var(--ink);
+}
+
+.place-card__meta { font-size: 0.8rem; color: var(--muted); margin-bottom: 8px; }
+
+.place-card__desc { font-size: 0.92rem; line-height: 1.5; margin: 8px 0; }
+
+.place-card__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.place-card__grid dt { color: var(--muted); }
+
+.place-card__grid dd { margin: 0; font-weight: 600; }
+
+.place-card__close {
+  float: right;
+  border: none;
+  background: var(--ochre);
+  color: var(--white);
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.place-card__photos { display: flex; gap: 6px; overflow-x: auto; margin-top: 12px; }
+
+.place-card__photos img {
+  width: 120px; height: 90px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.place-card__rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--ochre);
+  color: var(--white);
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+}
+
+@media (min-width: 720px) {
+  #place-card {
+    left: auto;
+    width: 420px;
+    bottom: 14px; right: 14px;
+  }
+}

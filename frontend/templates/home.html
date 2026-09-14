@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block title %}{{ brand_name }} — {% trans "Карта мест" %}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@maptiler/sdk@1.2.0/dist/maptiler-sdk.css">
+<link rel="stylesheet" href="{% static 'css/map.css' %}">
+{% endblock %}
+
+{% block content %}
+<div id="map-page" data-maptiler-key="{{ maptiler_api_key }}">
+  <div id="map"></div>
+
+  {% if not maptiler_api_key %}
+  <div id="map-notice">{% trans "Карта ещё не подключена: не задан ключ MapTiler в настройках." %}</div>
+  {% endif %}
+
+  <div id="category-bar">
+    <button class="chip active" data-code="">{% trans "Все" %}</button>
+    {% for c in categories %}
+    <button class="chip" data-code="{{ c.code }}">{{ c.name }}</button>
+    {% endfor %}
+  </div>
+
+  <div id="scene-actions">
+    <button id="btn-locate" title="{% trans 'Определить моё местоположение' %}">⌖</button>
+    <button id="btn-3d" title="{% trans '3D-рельеф' %}">🏔</button>
+  </div>
+
+  <div id="user-marker-hint" hidden>{% trans "Точка выбрана — нажмите ещё раз, чтобы убрать" %}</div>
+
+  <aside id="place-card" hidden></aside>
+</div>
+
+{{ js_strings|json_script:"i18n-strings" }}
+<script src="https://cdn.jsdelivr.net/npm/@maptiler/sdk@1.2.0/dist/maptiler-sdk.umd.min.js"></script>
+<script src="{% static 'js/map.js' %}" defer></script>
+{% endblock %}
