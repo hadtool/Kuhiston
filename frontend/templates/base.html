@@ -17,6 +17,7 @@
   <nav class="site-nav">
     <a href="{% url 'home' %}">{% trans "Карта" %}</a>
     <a href="{% url 'booking:object_list' %}">{% trans "Бронирование" %}</a>
+    <a href="{% url 'donate' %}">{% trans "Поддержать" %}</a>
     {% if user.is_authenticated %}
       {% if user.is_place_owner %}<a href="{% url 'booking:my_panel' %}">{% trans "Кабинет" %}</a>{% endif %}
       <a href="{% url 'users:logout' %}">{% trans "Выйти" %} ({{ user.username }})</a>

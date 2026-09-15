@@ -39,12 +39,13 @@ class PlaceAdmin(admin.ModelAdmin):
         "category",
         "region",
         "moderation_status",
+        "is_promoted",
         "get_coordinates",
         "added_by",
         "created_at",
     ]
-    list_filter = ["category", "region", "moderation_status", "access_difficulty"]
-    list_editable = ["moderation_status"]
+    list_filter = ["category", "region", "moderation_status", "access_difficulty", "is_promoted"]
+    list_editable = ["moderation_status", "is_promoted"]
     search_fields = ["name_ru", "name_en", "name_tg", "description_ru", "description_en", "description_tg"]
     autocomplete_fields = ["added_by"]
     date_hierarchy = "created_at"
@@ -55,7 +56,7 @@ class PlaceAdmin(admin.ModelAdmin):
         ("Классификация", {"fields": ("category", "region")}),
         ("Координаты", {"fields": ("latitude", "longitude"), "classes": ("wide",)}),
         ("Доступность", {"fields": ("opening_hours", "entrance_fee", "access_difficulty", "recommended_seasons")}),
-        ("Модерация", {"fields": ("moderation_status", "added_by")}),
+        ("Модерация", {"fields": ("moderation_status", "is_promoted", "added_by")}),
     )
 
     def save_model(self, request, obj, form, change):

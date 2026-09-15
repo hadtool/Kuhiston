@@ -43,7 +43,7 @@ class PlaceListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Place
-        fields = ["id", "name", "category", "lat", "lng", "distance_km", "rating"]
+        fields = ["id", "name", "category", "lat", "lng", "distance_km", "rating", "is_promoted"]
 
     def get_name(self, obj):
         return obj.get_name(self.context["language"])
@@ -90,6 +90,7 @@ class PlaceDetailSerializer(serializers.ModelSerializer):
             "rating",
             "reviews_count",
             "distance_km",
+            "is_promoted",
             "photos",
         ]
 

@@ -64,6 +64,8 @@ def home(request):
         "offline_cached": _("Доступно офлайн"),
         "offline_empty": _("Регионы не найдены"),
         "offline_places": _("мест(а)"),
+        "promoted": _("Продвинутое"),
+        "donate_btn": _("Поддержать проект"),
     }
     context = {
         "maptiler_api_key": settings.MAPTILER_API_KEY,
@@ -72,3 +74,8 @@ def home(request):
         "is_authenticated": request.user.is_authenticated,
     }
     return render(request, "home.html", context)
+
+
+def donate(request):
+    """Страница добровольных донатов (Этап 7)."""
+    return render(request, "donate.html", {"donate_url": settings.DONATE_URL})

@@ -190,6 +190,7 @@
       <button class="place-card__close" id="card-close">${I18N.close}</button>
       <h3 class="place-card__name">${escapeHtml(p.name)}</h3>
       <div class="place-card__meta">
+        ${p.is_promoted ? `<span class="place-card__badge">★ ${I18N.promoted}</span>` : ""}
         <span class="place-card__rating">★ ${formatRating(p.rating)}</span>
         ${p.category ? ` · ${escapeHtml(p.category)}` : ""}
         ${p.distance_km != null ? ` · ${formatter.format(p.distance_km)} km` : ""}

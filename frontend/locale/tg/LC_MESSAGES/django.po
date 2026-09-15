@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kuhiston 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 20:44+0500\n"
+"POT-Creation-Date: 2026-09-15 22:36+0500\n"
 "PO-Revision-Date: 2026-09-14\n"
 "Last-Translator: Kuhiston team <noreply@kuhiston.local>\n"
 "Language-Team: Tajik <noreply@kuhiston.local>\n"
@@ -183,7 +183,8 @@ msgstr "Реҷаи офлайн"
 
 #: backend/places/views.py:59 frontend/templates/home.html:58
 msgid "Скачайте карту и данные региона — они будут доступны без интернета."
-msgstr "Харита ва маълумоти минтақаро боргирӣ кунед — онҳо бе интернет кор мекунанд."
+msgstr ""
+"Харита ва маълумоти минтақаро боргирӣ кунед — онҳо бе интернет кор мекунанд."
 
 #: backend/places/views.py:60
 msgid "Скачать"
@@ -215,6 +216,15 @@ msgstr "Минтақаҳо ёфт нашуд"
 msgid "мест(а)"
 msgstr "ҷой(ҳо)"
 
+#: backend/places/views.py:67
+msgid "Продвинутое"
+msgstr "Пешбаришуда"
+
+#: backend/places/views.py:68 frontend/templates/donate.html:3
+#: frontend/templates/donate.html:10
+msgid "Поддержать проект"
+msgstr "Дастгирии лоиҳа"
+
 #: frontend/templates/base.html:18
 msgid "Карта"
 msgstr "Харитаи ҷойҳо"
@@ -224,21 +234,25 @@ msgstr "Харитаи ҷойҳо"
 msgid "Бронирование"
 msgstr "Фармоиш"
 
-#: frontend/templates/base.html:21
+#: frontend/templates/base.html:20
+msgid "Поддержать"
+msgstr "Дастгирӣ"
+
+#: frontend/templates/base.html:22
 msgid "Кабинет"
 msgstr "Кабинети соҳиб"
 
-#: frontend/templates/base.html:22
+#: frontend/templates/base.html:23
 msgid "Выйти"
 msgstr "Баромадан"
 
-#: frontend/templates/base.html:24 frontend/templates/booking/objects.html:28
+#: frontend/templates/base.html:25 frontend/templates/booking/objects.html:28
 #: frontend/templates/registration/login.html:3
 #: frontend/templates/registration/login.html:10
 msgid "Вход"
 msgstr "Вуруд"
 
-#: frontend/templates/base.html:25 frontend/templates/booking/objects.html:29
+#: frontend/templates/base.html:26 frontend/templates/booking/objects.html:29
 #: frontend/templates/registration/signup.html:3
 #: frontend/templates/registration/signup.html:10
 msgid "Регистрация"
@@ -353,6 +367,37 @@ msgstr "Барои фиристодани дархостҳо ва тақризҳ
 #: frontend/templates/booking/objects.html:42
 msgid "Пока нет доступных объектов бронирования"
 msgstr "Ҳоло объектҳои дастраси фармоиш вуҷуд надоранд"
+
+#: frontend/templates/donate.html:11
+msgid ""
+"Kuhiston — бесплатное приложение для путешествий по Таджикистану: карта "
+"достопримечательностей, маршруты, бронирование жилья, гидов и транспорта."
+msgstr "Kuhiston барномаи ройгони сафар дар Тоҷикистон аст: харитаи намоишгоҳҳо,"
+"масирҳо, фармоиши манзил, роҳнамоӣ ва нақлиёт."
+
+#: frontend/templates/donate.html:14
+msgid "Почему донаты важны"
+msgstr "Чаро донатиҳо муҳиманд"
+
+#: frontend/templates/donate.html:15
+msgid ""
+"Проект без рекламы и комиссий с бронирований. Ваш добровольный вклад "
+"помогает покрывать хостинг, развитие карт и новые регионы."
+msgstr "Лоиҳа бе таблиғот ва комиссия аз фармоишҳо аст. Саҳми ихтиёрии шумо барои"
+"хостинг, рушди харитаҳо ва минтақаҳои нав кӯмак мекунад."
+
+#: frontend/templates/donate.html:17
+#, fuzzy
+msgid "Сделать донат"
+msgstr "Донат кардан"
+
+#: frontend/templates/donate.html:19
+msgid "Ссылка для донатов появится в ближайшее время."
+msgstr "Истиноди донатҳо ба зудӣ пайдо мешавад."
+
+#: frontend/templates/donate.html:23
+msgid "Вернуться на карту"
+msgstr "Бозгашт ба харита"
 
 #: frontend/templates/home.html:3
 msgid "Карта мест"

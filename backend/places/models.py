@@ -115,6 +115,7 @@ class Place(models.Model):
         default=ModerationStatus.PENDING,
         verbose_name="статус модерации",
     )
+    is_promoted = models.BooleanField(default=False, verbose_name="продвижение в топе (Этап 7)")
     added_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -128,7 +129,7 @@ class Place(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ["name_ru"]
+        ordering = ["-is_promoted", "name_ru"]
         verbose_name = "место"
         verbose_name_plural = "места"
 

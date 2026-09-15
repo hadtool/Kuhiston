@@ -58,7 +58,8 @@ class PlaceListView(generics.ListAPIView):
             lat_f, lng_f = float(lat), float(lng)
             for p in places:
                 p.distance_km = round(haversine(lat_f, lng_f, float(p.latitude), float(p.longitude)), 1)
-            places.sort(key=lambda p: p.distance_km)
+            # Платное продвижение (Этап 7): продвинутые места всегда в топе выдачи.
+            places.sort(key=lambda p: (not p.is_promoted, p.distance_km))
         else:
             for p in places:
                 p.distance_km = None

@@ -186,6 +186,7 @@ MEDIA_ROOT = PROJECT_ROOT / 'frontend' / 'media'
 # Карта (MapTiler)
 # Ключ выдаётся основателем отдельно, хранится только в .env / переменной окружения.
 MAPTILER_API_KEY = os.environ.get('MAPTILER_API_KEY', '')
+DONATE_URL = os.environ.get('DONATE_URL', '')
 
 
 # Email

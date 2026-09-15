@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block title %}{{ brand_name }} — {% trans "Поддержать проект" %}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/page.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1 class="page-title">{% trans "Поддержать проект" %}</h1>
+<p class="page-meta">{% trans "Kuhiston — бесплатное приложение для путешествий по Таджикистану: карта достопримечательностей, маршруты, бронирование жилья, гидов и транспорта." %}</p>
+
+<div class="card">
+  <h2>{% trans "Почему донаты важны" %}</h2>
+  <p>{% trans "Проект без рекламы и комиссий с бронирований. Ваш добровольный вклад помогает покрывать хостинг, развитие карт и новые регионы." %}</p>
+  {% if donate_url %}
+  <p><a class="btn small ochre" href="{{ donate_url }}" target="_blank" rel="noopener">{% trans "Сделать донат" %} ❤</a></p>
+  {% else %}
+  <p>{% trans "Ссылка для донатов появится в ближайшее время." %}</p>
+  {% endif %}
+</div>
+
+<p class="page-meta"><a href="{% url 'home' %}">← {% trans "Вернуться на карту" %}</a></p>
+{% endblock %}
