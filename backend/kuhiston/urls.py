@@ -30,6 +30,7 @@ urlpatterns = [
     path('api/route/navigation/', api.NavigationRouteView.as_view(), name='api-route-navigation'),
     path('api/routes/', routes_api.RouteListView.as_view(), name='api-routes-list'),
     path('api/routes/<int:pk>/', routes_api.RouteDetailView.as_view(), name='api-routes-detail'),
+    path('api/places/<int:pk>/reviews/', api.PlaceReviewsView.as_view(), name='api-place-reviews'),
     path('api/categories/', api.CategoryListView.as_view(), name='api-categories'),
     path('booking/', include('booking.urls')),
     path('users/', include('users.urls')),

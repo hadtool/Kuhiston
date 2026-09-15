@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kuhiston 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 00:07+0500\n"
+"POT-Creation-Date: 2026-09-15 20:26+0500\n"
 "PO-Revision-Date: 2026-09-14\n"
 "Last-Translator: Kuhiston team <noreply@kuhiston.local>\n"
 "Language-Team: Tajik <noreply@kuhiston.local>\n"
@@ -93,8 +93,6 @@ msgid "Итого"
 msgstr "Ҳамагӣ"
 
 #: backend/places/views.py:37
-#, fuzzy
-#| msgid "Рядом пока нет мест"
 msgid "Рядом не найдено мест"
 msgstr "Дар наздикӣ ҷойҳо нестанд"
 
@@ -119,8 +117,6 @@ msgid "мин"
 msgstr "дақ"
 
 #: backend/places/views.py:43
-#, fuzzy
-#| msgid "Готовые маршруты"
 msgid "Построить маршрут"
 msgstr "Масъирҳои омода"
 
@@ -140,9 +136,47 @@ msgstr "Вақт"
 msgid "Маршрут по прямой (сервис недоступен)"
 msgstr "Роҳи рост (хизмат дастнорас аст)"
 
+#: backend/places/views.py:48
+msgid "Отзывы"
+msgstr "Тақризҳо"
+
+#: backend/places/views.py:49
+msgid "Пока нет отзывов"
+msgstr "Ҳанӯз тақриз нест"
+
+#: backend/places/views.py:50
+msgid "Ваш отзыв"
+msgstr "Тақризи шумо"
+
+#: backend/places/views.py:51
+msgid "Оставить отзыв"
+msgstr "Масъирҳои омода"
+
+#: backend/places/views.py:52
+msgid "Оценка"
+msgstr "Баҳо"
+
+#: backend/places/views.py:53
+msgid "Поделитесь впечатлениями…"
+msgstr "Таассуротатонро мубодила кунед…"
+
+#: backend/places/views.py:54
+msgid "Отправить отзыв"
+msgstr "Фиристодани дархост"
+
+#: backend/places/views.py:55
+msgid "Войдите, чтобы оставить отзыв"
+msgstr "Барои мондани тақриз ворид шавед"
+
+#: backend/places/views.py:56
+msgid "Спасибо! Отзыв сохранён"
+msgstr "Ташаккур! Тақриз нигоҳ дошта шуд"
+
+#: backend/places/views.py:57
+msgid "Не удалось сохранить отзыв"
+msgstr "Гирифтани маълумот нарасид"
+
 #: frontend/templates/base.html:18
-#, fuzzy
-#| msgid "Карта мест"
 msgid "Карта"
 msgstr "Харитаи ҷойҳо"
 
@@ -218,8 +252,6 @@ msgid "Действия"
 msgstr "Амалҳо"
 
 #: frontend/templates/booking/my_panel.html:46
-#, fuzzy
-#| msgid "Карта мест"
 msgid "оплата на месте"
 msgstr "Харитаи ҷойҳо"
 
@@ -232,8 +264,6 @@ msgid "Отклонить"
 msgstr "Рад кардан"
 
 #: frontend/templates/booking/my_panel.html:63
-#, fuzzy
-#| msgid "Рядом пока нет мест"
 msgid "Заявок пока нет"
 msgstr "Дар наздикӣ ҷойҳо нестанд"
 
@@ -246,8 +276,6 @@ msgid "Места не указаны"
 msgstr "Ҷойҳо нишон дода нашудаанд"
 
 #: frontend/templates/booking/object_detail.html:23
-#, fuzzy
-#| msgid "Готовые маршруты"
 msgid "Оставить заявку"
 msgstr "Масъирҳои омода"
 
@@ -268,20 +296,14 @@ msgid "Жильё, гиды, транспорт и рестораны рядом
 msgstr "Манзил, роҳнамоҳо, нақлиёт ва тарабхонаҳо дар наздикии ҷойҳо"
 
 #: frontend/templates/booking/objects.html:15
-#, fuzzy
-#| msgid "Рядом пока нет мест"
 msgid "Рядом с местом:"
 msgstr "Дар наздикӣ ҷойҳо нестанд"
 
 #: frontend/templates/booking/objects.html:17
-#, fuzzy
-#| msgid "Рядом пока нет мест"
 msgid "Рядом с местом"
 msgstr "Дар наздикӣ ҷойҳо нестанд"
 
 #: frontend/templates/booking/objects.html:17
-#, fuzzy
-#| msgid "Рядом пока нет мест"
 msgid "объектов пока нет"
 msgstr "Дар наздикӣ ҷойҳо нестанд"
 
@@ -299,8 +321,10 @@ msgstr "Харитаи ҷойҳо"
 
 #: frontend/templates/home.html:15
 msgid "Карта ещё не подключена: не задан ключ MapTiler в настройках."
-msgstr "Харита пайваст нашудааст: калиди MapTiler дар танзимот муайян нашудааст."
-"Харита пайваст нашудааст: калиди MapTiler дар танзимот гузошта нашудааст."
+msgstr ""
+"Харита пайваст нашудааст: калиди MapTiler дар танзимот муайян "
+"нашудааст.Харита пайваст нашудааст: калиди MapTiler дар танзимот гузошта "
+"нашудааст."
 
 #: frontend/templates/home.html:19
 msgid "Все"

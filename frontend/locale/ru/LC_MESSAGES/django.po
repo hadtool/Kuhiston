@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kuhiston 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 00:07+0500\n"
+"POT-Creation-Date: 2026-09-15 20:26+0500\n"
 "PO-Revision-Date: 2026-09-14\n"
 "Last-Translator: Kuhiston team <noreply@kuhiston.local>\n"
 "Language-Team: Russian <noreply@kuhiston.local>\n"
@@ -94,8 +94,6 @@ msgid "Итого"
 msgstr "Итого"
 
 #: backend/places/views.py:37
-#, fuzzy
-#| msgid "Рядом пока нет мест"
 msgid "Рядом не найдено мест"
 msgstr "Рядом пока нет мест"
 
@@ -120,8 +118,6 @@ msgid "мин"
 msgstr "мин"
 
 #: backend/places/views.py:43
-#, fuzzy
-#| msgid "Готовые маршруты"
 msgid "Построить маршрут"
 msgstr "Готовые маршруты"
 
@@ -141,9 +137,47 @@ msgstr "Время"
 msgid "Маршрут по прямой (сервис недоступен)"
 msgstr "Маршрут по прямой (сервис недоступен)"
 
+#: backend/places/views.py:48
+msgid "Отзывы"
+msgstr "Отзывы"
+
+#: backend/places/views.py:49
+msgid "Пока нет отзывов"
+msgstr "Пока нет отзывов"
+
+#: backend/places/views.py:50
+msgid "Ваш отзыв"
+msgstr "Ваш отзыв"
+
+#: backend/places/views.py:51
+msgid "Оставить отзыв"
+msgstr "Готовые маршруты"
+
+#: backend/places/views.py:52
+msgid "Оценка"
+msgstr "Оценка"
+
+#: backend/places/views.py:53
+msgid "Поделитесь впечатлениями…"
+msgstr "Поделитесь впечатлениями…"
+
+#: backend/places/views.py:54
+msgid "Отправить отзыв"
+msgstr "Отправить заявку"
+
+#: backend/places/views.py:55
+msgid "Войдите, чтобы оставить отзыв"
+msgstr "Войдите, чтобы оставить отзыв"
+
+#: backend/places/views.py:56
+msgid "Спасибо! Отзыв сохранён"
+msgstr "Спасибо! Отзыв сохранён"
+
+#: backend/places/views.py:57
+msgid "Не удалось сохранить отзыв"
+msgstr "Не удалось получить данные"
+
 #: frontend/templates/base.html:18
-#, fuzzy
-#| msgid "Карта мест"
 msgid "Карта"
 msgstr "Карта мест"
 
@@ -219,8 +253,6 @@ msgid "Действия"
 msgstr "Действия"
 
 #: frontend/templates/booking/my_panel.html:46
-#, fuzzy
-#| msgid "Карта мест"
 msgid "оплата на месте"
 msgstr "Карта мест"
 
@@ -233,8 +265,6 @@ msgid "Отклонить"
 msgstr "Отклонить"
 
 #: frontend/templates/booking/my_panel.html:63
-#, fuzzy
-#| msgid "Рядом пока нет мест"
 msgid "Заявок пока нет"
 msgstr "Рядом пока нет мест"
 
@@ -247,8 +277,6 @@ msgid "Места не указаны"
 msgstr "Места не указаны"
 
 #: frontend/templates/booking/object_detail.html:23
-#, fuzzy
-#| msgid "Готовые маршруты"
 msgid "Оставить заявку"
 msgstr "Готовые маршруты"
 
@@ -269,20 +297,14 @@ msgid "Жильё, гиды, транспорт и рестораны рядом
 msgstr "Жильё, гиды, транспорт и рестораны рядом с местами"
 
 #: frontend/templates/booking/objects.html:15
-#, fuzzy
-#| msgid "Рядом пока нет мест"
 msgid "Рядом с местом:"
 msgstr "Рядом пока нет мест"
 
 #: frontend/templates/booking/objects.html:17
-#, fuzzy
-#| msgid "Рядом пока нет мест"
 msgid "Рядом с местом"
 msgstr "Рядом пока нет мест"
 
 #: frontend/templates/booking/objects.html:17
-#, fuzzy
-#| msgid "Рядом пока нет мест"
 msgid "объектов пока нет"
 msgstr "Рядом пока нет мест"
 

@@ -1,16 +1,17 @@
 import math
 
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from kuhiston.routing import haversine_km, osrm_route
 
-from .models import Place, PlaceCategory
+from .models import Place, PlaceCategory, Review
 from .serializers import (
     PlaceCategorySerializer,
     PlaceDetailSerializer,
     PlaceListSerializer,
+    ReviewSerializer,
     SimpleRoutePointSerializer,
 )
 
@@ -138,6 +139,48 @@ class SimpleRouteView(APIView):
                 "points": serializer.data,
             }
         )
+
+
+class PlaceReviewsView(APIView):
+    """Отзывы к месту: список (GET) и создание/обновление (POST, только для авторизованных)."""
+
+    def get_place(self, pk):
+        try:
+            return Place.objects.get(pk=pk, moderation_status="published")
+        except Place.DoesNotExist:
+            return None
+
+    def get(self, request, pk):
+        place = self.get_place(pk)
+        if not place:
+            return Response(status=404)
+        reviews = list(Review.objects.filter(place=place).select_related("author")[:20])
+        data = ReviewSerializer(reviews, many=True, context={"request": request}).data
+        avg = place.average_rating
+        my_review = None
+        if request.user.is_authenticated:
+            obj = Review.objects.filter(place=place, author=request.user).first()
+            my_review = ReviewSerializer(obj, context={"request": request}).data if obj else None
+        return Response({"average": avg, "count": place.reviews_count, "reviews": data, "my_review": my_review})
+
+    def post(self, request, pk):
+        if not request.user.is_authenticated:
+            return Response({"detail": "Authentication required"}, status=status.HTTP_401_UNAUTHORIZED)
+        place = self.get_place(pk)
+        if not place:
+            return Response(status=404)
+        try:
+            rating = int(request.data.get("rating", 0))
+        except (TypeError, ValueError):
+            return Response({"detail": "Invalid rating"}, status=400)
+        if rating < 1 or rating > 5:
+            return Response({"detail": "Rating must be 1–5"}, status=400)
+        obj, _ = Review.objects.update_or_create(
+            place=place,
+            author=request.user,
+            defaults={"rating": rating, "text": request.data.get("text", "")},
+        )
+        return Response(ReviewSerializer(obj, context={"request": request}).data, status=201)
 
 
 class NavigationRouteView(APIView):

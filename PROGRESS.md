@@ -66,6 +66,31 @@
 
 ---
 
+## Сессия 13 — 2026-09-15
+**План:**
+- Этап 5 «Отзывы» (PROJECT.md раздел 8): 1) форма отзыва/оценки после регистрации, 2) отображение рейтинга и отзывов на карточке места.
+
+**Сделано:**
+- Backend: `ReviewSerializer` (id, author=username, rating, text, created_at) в `places/serializers.py`; `PlaceReviewsView` в `places/api.py`:
+  - `GET /api/places/<pk>/reviews/` — для опубликованного места: `{average, count, reviews[], my_review}`; средний из `Place.average_rating`/`reviews_count` (уже были в Этапе 2);
+  - `POST` — требует auth (иначе 401), `rating` 1–5 (иначе 400), `update_or_create` по (place, author) — повторный отзыв пользователя обновляется, ответ 201.
+  - URL: `path('api/places/<int:pk>/reviews/')`.
+- Фронтенд (`map.js`): в карточке места блок `#card-reviews`; `loadReviews`/`renderReviews` — суммарный рейтинг, список отзывов (автор, звёзды, дата, текст), форма отзыва для авторизованных (звёзды 1–5 кликом + textarea + кнопка; редактирование своего отзыва: презаполнена из `my_review`), для гостей — ссылка «Войдите, чтобы оставить отзыв»; `postReview` через `fetch` POST с `X-CSRFToken` из cookie; `getCsrfToken`. Признак `data-auth` на `#map-page` (`request.user.is_authenticated`) в `home.html`.
+- Новые ключи `js_strings` (reviews_title, reviews_empty, review_yours, review_leave, review_rating_label, review_text_placeholder, review_submit, review_logged_in_need, review_saved, review_fail) в `places/views.py`; стили отзывов в `map.css`.
+- Переводы: 10 новых строк Этапа 5 в `frontend/locale/{ru,en,tg}` (сняты fuzzy-флаги у «Оставить отзыв»/«Отправить отзыв»/«Не удалось сохранить отзыв»), `compilemessages`.
+- Проверено тест-клиентом (sqlite): GET пустой = 200 `{average:null,count:0}`; POST аноним = 401; POST авторизован = 201; повторный POST обновляет (count=1, rating 5→4, avg обновляется); rating=9 = 400; home = 200 и содержит ключи отзывов. `manage.py check` и `makemigrations --check` чистые. JS-проверка `node --check` невозможна (node отсутствует) — код прочитан вручную.
+
+**Не сделано / отложено:**
+- Живой рендер/отправку отзыва в браузере не проверить (нет браузера, node); верификация — только тест-клиент и чтение JS.
+- `review_rating_label` («Оценка») в JS пока не используется (звёзды кликабельны без подписи поля) — ключ переведён для будущего использования.
+
+**Заметки для следующей сессии:**
+- Этап 5 закрыт (2/2). Осталось: Этап 0 (PostGIS, блочер машины основателя), Этап 6 «Офлайн-режим» (3 задачи), Этап 7 «Монетизация» (2 задачи).
+- Модель `Review` с полями и constraint `review_rating_range` создана на Этапе 1 и уже в миграциях—новых миграций не потребовалось.
+- Коммит Этапа 5 — `?` (дописать хеш в следующей сессии).
+
+---
+
 ## Сессия 11 — 2026-09-14
 **План:**
 - Задачи Этапа 3 «Маршруты» (PROJECT.md раздел 6):

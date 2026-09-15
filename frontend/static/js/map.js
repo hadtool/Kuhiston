@@ -12,6 +12,7 @@
 
   const apiKey = page.dataset.maptilerKey || "";
   const I18N = parseStrings();
+  const isAuth = page.dataset.auth === "1";
   const formatter = new Intl.NumberFormat(document.documentElement.lang || "ru", { maximumFractionDigits: 1 });
 
   const state = {
@@ -195,7 +196,8 @@
         ${rows.map((r) => `<dt>${escapeHtml(r.label)}</dt><dd>${escapeHtml(String(r.value))}</dd>`).join("")}
       </dl>
       <button class="place-card__nav" id="card-nav">${I18N.nav_btn}</button>
-      <a class="place-card__nav place-card__book" href="/booking/?place=${p.id}">${I18N.book_btn}</a>`;
+      <a class="place-card__nav place-card__book" href="/booking/?place=${p.id}">${I18N.book_btn}</a>
+      <div class="place-card__reviews" id="card-reviews"></div>`;
     card.hidden = false;
 
     document.getElementById("card-close").addEventListener("click", () => {
@@ -204,6 +206,98 @@
     document.getElementById("card-nav").addEventListener("click", () => {
       loadNavigation(p.lat, p.lng);
     });
+    loadReviews(p.id);
+  }
+
+  /* ---------- отзывы (Этап 5) ---------- */
+  async function loadReviews(placeId) {
+    const box = document.getElementById("card-reviews");
+    if (!box) return;
+    box.innerHTML = `<p class="muted">${I18N.loading}</p>`;
+    try {
+      const resp = await fetch(`/api/places/${placeId}/reviews/`, { headers: { Accept: "application/json" } });
+      if (!resp.ok) throw new Error(resp.status);
+      const data = await resp.json();
+      renderReviews(placeId, data, box);
+    } catch (err) {
+      box.innerHTML = "";
+    }
+  }
+
+  function renderReviews(placeId, data, box) {
+    let html = `<h4 class="reviews-title">${I18N.reviews_title}</h4>`;
+    if (data.average) {
+      html += `<div class="reviews-summary"><span class="place-card__rating">★ ${formatRating(data.average)}</span> <span class="muted">(${data.count})</span></div>`;
+    }
+    const reviews = data.reviews || [];
+    if (!reviews.length) {
+      html += `<p class="muted">${I18N.reviews_empty}</p>`;
+    } else {
+      html += `<ul class="reviews-list">${reviews.map((r) => `
+        <li class="review">
+          <strong>${escapeHtml(r.author)}</strong>
+          <span class="review-stars">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</span>
+          <span class="review-date">${new Date(r.created_at).toLocaleDateString()}</span>
+          ${r.text ? `<p class="review-text">${escapeHtml(r.text)}</p>` : ""}
+        </li>`).join("")}</ul>`;
+    }
+    if (isAuth) {
+      const myRating = data.my_review ? data.my_review.rating : 0;
+      html += `
+        <div class="review-form" id="review-form">
+          <p class="review-form__label">${data.my_review ? I18N.review_yours : I18N.review_leave}</p>
+          <div class="review-stars" id="review-stars" data-rating="${myRating}">
+            ${[1, 2, 3, 4, 5].map((n) => `<button class="star" data-star="${n}" title="${n}/5">${n <= myRating ? "★" : "☆"}</button>`).join("")}
+          </div>
+          <textarea class="review-textarea" id="review-text" rows="3" placeholder="${escapeHtml(I18N.review_text_placeholder)}">${data.my_review && data.my_review.text ? escapeHtml(data.my_review.text) : ""}</textarea>
+          <button class="btn ochre review-submit" id="review-submit">${I18N.review_submit}</button>
+          <p class="review-status" id="review-status"></p>
+        </div>`;
+    } else {
+      html += `<p class="muted"><a href="/users/login/">${I18N.review_logged_in_need}</a></p>`;
+    }
+    box.innerHTML = html;
+    const starsEl = box.querySelector("#review-stars");
+    if (starsEl) {
+      starsEl.querySelectorAll(".star").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const val = parseInt(btn.dataset.star, 10);
+          starsEl.dataset.rating = val;
+          starsEl.querySelectorAll(".star").forEach((s) => {
+            s.textContent = parseInt(s.dataset.star, 10) <= val ? "★" : "☆";
+          });
+        });
+      });
+    }
+    const submitBtn = box.querySelector("#review-submit");
+    if (submitBtn) {
+      submitBtn.addEventListener("click", () => postReview(placeId, starsEl, box));
+    }
+  }
+
+  async function postReview(placeId, starsEl, box) {
+    const rating = parseInt(starsEl.dataset.rating, 10);
+    if (!rating || rating < 1 || rating > 5) return;
+    const text = (box.querySelector("#review-text") || {}).value || "";
+    const statusEl = box.querySelector("#review-status");
+    try {
+      const resp = await fetch(`/api/places/${placeId}/reviews/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-CSRFToken": getCsrfToken() },
+        body: JSON.stringify({ rating, text }),
+      });
+      if (!resp.ok) throw new Error(resp.status);
+      if (statusEl) statusEl.textContent = I18N.review_saved;
+      loadReviews(placeId);
+    } catch (err) {
+      if (statusEl) statusEl.textContent = I18N.review_fail;
+    }
+  }
+
+  function getCsrfToken() {
+    const name = "csrftoken";
+    const match = document.cookie.match(new RegExp(`${name}=([^;]+)`));
+    return match ? match[1] : "";
   }
 
   /* ---------- 3D-рельеф (задача 5) ---------- */

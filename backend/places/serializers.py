@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Place, PlaceCategory, PlacePhoto
+from .models import Place, PlaceCategory, PlacePhoto, Review
 
 
 class PlaceCategorySerializer(serializers.ModelSerializer):
@@ -149,3 +149,16 @@ class SimpleRoutePointSerializer(serializers.ModelSerializer):
 
     def get_leg_km(self, obj):
         return getattr(obj, "leg_km", None)
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    """Отзыв туриста о месте (Этап 5)."""
+
+    author = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Review
+        fields = ["id", "author", "rating", "text", "created_at"]
+
+    def get_author(self, obj):
+        return obj.author.username if obj.author else ""
