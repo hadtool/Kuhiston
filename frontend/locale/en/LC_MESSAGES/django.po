@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kuhiston 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-14 23:56+0500\n"
+"POT-Creation-Date: 2026-09-15 00:07+0500\n"
 "PO-Revision-Date: 2026-09-14\n"
 "Last-Translator: Kuhiston team <noreply@kuhiston.local>\n"
 "Language-Team: English <noreply@kuhiston.local>\n"
@@ -14,6 +14,27 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: backend/booking/forms.py:14
+msgid "Иван Иванов"
+msgstr "John Doe"
+
+#: backend/booking/forms.py:15
+msgid "Телефон или email"
+msgstr "Phone or email"
+
+#: backend/booking/forms.py:26
+msgid "Дата выезда не может быть раньше даты заезда."
+msgstr "Check-out date cannot be earlier than the check-in date."
+
+#: backend/booking/views.py:42
+msgid "Заявка отправлена! Владелец свяжется с вами."
+msgstr "Request sent! The owner will contact you."
+
+#: backend/booking/views.py:67
+#, python-format
+msgid "Заявка: %s."
+msgstr "Request: %s."
 
 #: backend/places/views.py:23 frontend/templates/home.html:26
 msgid "Определить моё местоположение"
@@ -104,16 +125,173 @@ msgid "Построить маршрут"
 msgstr "Guided routes"
 
 #: backend/places/views.py:44
+msgid "Забронировать рядом"
+msgstr "Book nearby"
+
+#: backend/places/views.py:45
 msgid "Расстояние"
 msgstr "Distance"
 
-#: backend/places/views.py:45
+#: backend/places/views.py:46
 msgid "Время"
 msgstr "Time"
 
-#: backend/places/views.py:46
+#: backend/places/views.py:47
 msgid "Маршрут по прямой (сервис недоступен)"
 msgstr "Straight-line route (service unavailable)"
+
+#: frontend/templates/base.html:18
+#, fuzzy
+#| msgid "Карта мест"
+msgid "Карта"
+msgstr "Map of places"
+
+#: frontend/templates/base.html:19 frontend/templates/booking/objects.html:3
+#: frontend/templates/booking/objects.html:10
+msgid "Бронирование"
+msgstr "Booking"
+
+#: frontend/templates/base.html:21
+msgid "Кабинет"
+msgstr "Owner dashboard"
+
+#: frontend/templates/base.html:22
+msgid "Выйти"
+msgstr "Log out"
+
+#: frontend/templates/base.html:24 frontend/templates/booking/objects.html:28
+#: frontend/templates/registration/login.html:3
+#: frontend/templates/registration/login.html:10
+msgid "Вход"
+msgstr "Log in"
+
+#: frontend/templates/base.html:25 frontend/templates/booking/objects.html:29
+#: frontend/templates/registration/signup.html:3
+#: frontend/templates/registration/signup.html:10
+msgid "Регистрация"
+msgstr "Sign up"
+
+#: frontend/templates/booking/my_panel.html:3
+#: frontend/templates/booking/my_panel.html:10
+#: frontend/templates/booking/objects.html:23
+msgid "Мой кабинет"
+msgstr "My dashboard"
+
+#: frontend/templates/booking/my_panel.html:11
+msgid "Заявки на ваши объекты бронирования"
+msgstr "Requests for your booking objects"
+
+#: frontend/templates/booking/my_panel.html:17
+msgid "Ваши объекты"
+msgstr "Your objects"
+
+#: frontend/templates/booking/my_panel.html:25
+msgid "У вас пока нет объектов бронирования"
+msgstr "You have no booking objects yet"
+
+#: frontend/templates/booking/my_panel.html:29
+msgid "Заявки"
+msgstr "Requests"
+
+#: frontend/templates/booking/my_panel.html:34
+msgid "Объект"
+msgstr "Object"
+
+#: frontend/templates/booking/my_panel.html:35
+msgid "Турист"
+msgstr "Tourist"
+
+#: frontend/templates/booking/my_panel.html:36
+msgid "Контакт"
+msgstr "Contact"
+
+#: frontend/templates/booking/my_panel.html:37
+msgid "Даты"
+msgstr "Dates"
+
+#: frontend/templates/booking/my_panel.html:38
+msgid "Статус"
+msgstr "Status"
+
+#: frontend/templates/booking/my_panel.html:39
+msgid "Действия"
+msgstr "Actions"
+
+#: frontend/templates/booking/my_panel.html:46
+#, fuzzy
+#| msgid "Карта мест"
+msgid "оплата на месте"
+msgstr "Map of places"
+
+#: frontend/templates/booking/my_panel.html:52
+msgid "Подтвердить"
+msgstr "Confirm"
+
+#: frontend/templates/booking/my_panel.html:53
+msgid "Отклонить"
+msgstr "Reject"
+
+#: frontend/templates/booking/my_panel.html:63
+#, fuzzy
+#| msgid "Рядом пока нет мест"
+msgid "Заявок пока нет"
+msgstr "No places nearby"
+
+#: frontend/templates/booking/object_detail.html:10
+msgid "Назад к списку"
+msgstr "Back to list"
+
+#: frontend/templates/booking/object_detail.html:19
+msgid "Места не указаны"
+msgstr "No places specified"
+
+#: frontend/templates/booking/object_detail.html:23
+#, fuzzy
+#| msgid "Готовые маршруты"
+msgid "Оставить заявку"
+msgstr "Guided routes"
+
+#: frontend/templates/booking/object_detail.html:24
+msgid "Заявка без онлайн-оплаты — владелец свяжется с вами для подтверждения."
+msgstr "Request with no online payment — the owner will contact you to confirm."
+
+#: frontend/templates/booking/object_detail.html:31
+msgid "Вы вошли как"
+msgstr "You are logged in as"
+
+#: frontend/templates/booking/object_detail.html:63
+msgid "Отправить заявку"
+msgstr "Send request"
+
+#: frontend/templates/booking/objects.html:11
+msgid "Жильё, гиды, транспорт и рестораны рядом с местами"
+msgstr "Accommodation, guides, transport and restaurants near places"
+
+#: frontend/templates/booking/objects.html:15
+#, fuzzy
+#| msgid "Рядом пока нет мест"
+msgid "Рядом с местом:"
+msgstr "No places nearby"
+
+#: frontend/templates/booking/objects.html:17
+#, fuzzy
+#| msgid "Рядом пока нет мест"
+msgid "Рядом с местом"
+msgstr "No places nearby"
+
+#: frontend/templates/booking/objects.html:17
+#, fuzzy
+#| msgid "Рядом пока нет мест"
+msgid "объектов пока нет"
+msgstr "No places nearby"
+
+#: frontend/templates/booking/objects.html:27
+msgid "Чтобы оставлять заявки и отзывы, войдите или зарегистрируйтесь:"
+msgstr "To leave requests and reviews, log in or sign up:"
+
+#: frontend/templates/booking/objects.html:42
+msgid "Пока нет доступных объектов бронирования"
+msgstr "No booking objects available yet"
 
 #: frontend/templates/home.html:3
 msgid "Карта мест"
@@ -142,6 +320,24 @@ msgstr "3D terrain"
 #: frontend/templates/home.html:43
 msgid "Ближайшие места"
 msgstr "Nearest places"
+
+#: frontend/templates/registration/login.html:24
+#: frontend/templates/registration/signup.html:35
+msgid "Войти"
+msgstr "Log in"
+
+#: frontend/templates/registration/login.html:28
+msgid "Нет аккаунта?"
+msgstr "No account?"
+
+#: frontend/templates/registration/login.html:28
+#: frontend/templates/registration/signup.html:32
+msgid "Зарегистрироваться"
+msgstr "Sign up"
+
+#: frontend/templates/registration/signup.html:35
+msgid "Уже есть аккаунт?"
+msgstr "Already have an account?"
 
 #~ msgid "Туристическое приложение по Таджикистану"
 #~ msgstr "Tourism app for Tajikistan"

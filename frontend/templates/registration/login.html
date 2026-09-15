@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block title %}{% trans "Вход" %} — {{ brand_name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/page.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1 class="page-title">{% trans "Вход" %}</h1>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <div class="field">
+    <label>{{ form.username.label }}</label>
+    {{ form.username }}
+  </div>
+  <div class="field">
+    <label>{{ form.password.label }}</label>
+    {{ form.password }}
+    {{ form.password.errors }}
+  </div>
+  <button class="btn ochre" type="submit">{% trans "Войти" %}</button>
+  {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+</form>
+
+<p class="auth-links">{% trans "Нет аккаунта?" %} <a href="{% url 'users:signup' %}">{% trans "Зарегистрироваться" %}</a></p>
+{% endblock %}

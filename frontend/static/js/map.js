@@ -194,7 +194,8 @@
       <dl class="place-card__grid">
         ${rows.map((r) => `<dt>${escapeHtml(r.label)}</dt><dd>${escapeHtml(String(r.value))}</dd>`).join("")}
       </dl>
-      <button class="place-card__nav" id="card-nav">${I18N.nav_btn}</button>`;
+      <button class="place-card__nav" id="card-nav">${I18N.nav_btn}</button>
+      <a class="place-card__nav place-card__book" href="/booking/?place=${p.id}">${I18N.book_btn}</a>`;
     card.hidden = false;
 
     document.getElementById("card-close").addEventListener("click", () => {

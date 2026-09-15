@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load i18n static localize %}
+{% block title %}{{ brand_name }} — {% trans "Бронирование" %}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/page.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1 class="page-title">{% trans "Бронирование" %}</h1>
+<p class="page-meta">{% trans "Жильё, гиды, транспорт и рестораны рядом с местами" %}</p>
+
+{% if place %}
+  {% if objects %}
+    <p class="page-meta">{% trans "Рядом с местом:" %} <strong>{{ place|get_name:LANGUAGE_CODE }}</strong></p>
+  {% else %}
+    <p class="page-meta">{% trans "Рядом с местом" %} <strong>{{ place|get_name:LANGUAGE_CODE }}</strong>: {% trans "объектов пока нет" %}</p>
+  {% endif %}
+{% endif %}
+
+{% if user.is_authenticated %}
+  {% if user.is_place_owner %}
+  <p><a class="btn small ochre" href="{% url 'booking:my_panel' %}">{% trans "Мой кабинет" %}</a></p>
+  {% endif %}
+{% else %}
+  <p class="auth-links">
+    {% trans "Чтобы оставлять заявки и отзывы, войдите или зарегистрируйтесь:" %}
+    <a href="{% url 'users:login' %}">{% trans "Вход" %}</a> ·
+    <a href="{% url 'users:signup' %}">{% trans "Регистрация" %}</a>
+  </p>
+{% endif %}
+
+<div class="grid">
+  {% for obj in objects %}
+  <a class="card" href="{% url 'booking:object_detail' obj.pk %}">
+    <span class="badge">{{ obj.category|get_name:LANGUAGE_CODE }}</span>
+    <h3>{{ obj|get_name:LANGUAGE_CODE }}</h3>
+    <p>{{ obj|get_description:LANGUAGE_CODE|default:""|truncatechars:120 }}</p>
+    <p>{{ obj.region|get_name:LANGUAGE_CODE }} · {{ obj.phone }}</p>
+  </a>
+  {% empty %}
+  <p>{% trans "Пока нет доступных объектов бронирования" %}</p>
+  {% endfor %}
+</div>
+{% endblock %}

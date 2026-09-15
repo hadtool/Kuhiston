@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load i18n static localize %}
+{% block title %}{{ object.get_name }} — {{ brand_name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/page.css' %}">
+{% endblock %}
+
+{% block content %}
+<p><a class="btn small ghost" href="{% url 'booking:object_list' %}">← {% trans "Назад к списку" %}</a></p>
+
+<div class="brief">
+  <span class="badge">{{ object.category|get_name:LANGUAGE_CODE }}</span>
+  <h2>{{ object|get_name:LANGUAGE_CODE }}</h2>
+  <p class="muted">{{ object.region|get_name:LANGUAGE_CODE }} · {{ object.phone }}{% if object.email %} · {{ object.email }}{% endif %}</p>
+  <p>{{ object|get_description:LANGUAGE_CODE }}</p>
+  <ul>
+    {% for place in object.places.all %}<li>{{ place|get_name:LANGUAGE_CODE }}</li>{% empty %}
+    <li>{% trans "Места не указаны" %}</li>{% endfor %}
+  </ul>
+</div>
+
+<h2 class="page-title" style="font-size:1.2rem">{% trans "Оставить заявку" %}</h2>
+<p class="muted">{% trans "Заявка без онлайн-оплаты — владелец свяжется с вами для подтверждения." %}</p>
+
+{% if messages %}
+<ul class="messages">{% for message in messages %}<li>{{ message }}</li>{% endfor %}</ul>
+{% endif %}
+
+{% if user.is_authenticated %}
+<p class="muted">{% trans "Вы вошли как" %}: <strong>{{ user }}</strong></p>
+{% endif %}
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <div class="field">
+    <label>{{ form.tourist_name.label }} *</label>
+    {{ form.tourist_name }}
+    {{ form.tourist_name.errors }}
+  </div>
+  <div class="field">
+    <label>{{ form.tourist_contact.label }} *</label>
+    {{ form.tourist_contact }}
+    {{ form.tourist_contact.errors }}
+  </div>
+  <div class="field">
+    <label>{{ form.check_in.label }}</label>
+    {{ form.check_in }}
+  </div>
+  <div class="field">
+    <label>{{ form.check_out.label }}</label>
+    {{ form.check_out }}
+  </div>
+  <div class="field">
+    <label>{{ form.notes.label }}</label>
+    {{ form.notes }}
+  </div>
+  <div class="field checkbox">
+    {{ form.pay_on_site }}
+    <label for="{{ form.pay_on_site.id_for_label }}">{{ form.pay_on_site.label }}</label>
+  </div>
+  <button class="btn ochre" type="submit">{% trans "Отправить заявку" %}</button>
+</form>
+{% endblock %}

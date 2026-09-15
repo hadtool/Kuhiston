@@ -31,6 +31,8 @@ urlpatterns = [
     path('api/routes/', routes_api.RouteListView.as_view(), name='api-routes-list'),
     path('api/routes/<int:pk>/', routes_api.RouteDetailView.as_view(), name='api-routes-detail'),
     path('api/categories/', api.CategoryListView.as_view(), name='api-categories'),
+    path('booking/', include('booking.urls')),
+    path('users/', include('users.urls')),
     path('admin/', admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),
 ]

@@ -40,6 +40,32 @@
 
 ---
 
+## Сессия 12 — 2026-09-15
+**План:**
+- Этап 4 «Бронирование» (PROJECT.md раздел 7): форма заявки, кабинет владельца (подтверждение/отклонение), пометка «оплата на месте», регистрация/вход туриста.
+
+**Сделано:**
+- `backend/booking/forms.py` — `BookingRequestForm` (tourist_name, tourist_contact, check_in/check_out, notes, pay_on_site; валидация: выезд не раньше заезда; переводные метки/подсказки).
+- `backend/booking/views.py` — `object_list` (активные объекты, фильтр `?place=<id>` по M2M мест, `?category`), `object_detail` (карточка + POST-заявка, tourист привязывается если залогинен), `my_panel` (кабинет владельца: свои объекты + заявки), `set_status` (confirm/reject с проверкой владельца).
+- `backend/booking/urls.py` (`app_name="booking"`): `/booking/`, `/booking/object/<pk>/`, `/booking/my/`, `/booking/my/<pk>/<status>/`. Подключён в корневой `urls.py` (`path('booking/', include('booking.urls'))`).
+- Шаблоны `frontend/templates/booking/{objects,object_detail,my_panel}.html` (extends base.html, `page.css`, таблица заявок с кнопками Подтвердить/Отклонить, бейдж «оплата на месте» 💵).
+- Авторизация туриста: `backend/users/forms.py::TouristSignupForm` (UserCreationForm на кастомную модель), `backend/users/views.py` (signup/login/logout), `backend/users/urls.py` (`/users/signup/ /login/ /logout/`, app_name="users"), шаблоны `frontend/templates/registration/{signup,login}.html`. Nav-ссылки (Карта/Бронирование/Кабинет/Вход/Регистрация/Выйти) добавлены в шапку `base.html`, стили — `frontend/static/css/base.css` (+ `.site-nav` в map.css).
+- Локализация мультиязычных имён в шаблонах: новый templatetag `users/templatetags/localize.py` (`get_name`/`get_description` фильтры с аргументом-языком; методы с аргументами в шаблонах Django не вызываются) — `{{ obj|get_name:LANGUAGE_CODE }}`.
+- Кнопка «Забронировать рядом» в карточке места (map.js → `/booking/?place=<id>`), флаг `book_btn` в `js_strings` (places/views.py).
+- Переводы: 39 новых строк для Этапа 4 в `frontend/locale/{ru,en,tg}` (ru — identity, en/tg переведены), `compilemessages`.
+- Проверено тест-клиентом на sqlite (Postgres в песочнице перестал подниматься — см. ISSUES): list/detail/my_panel = 200, POST заявки = 302 с redirect, pay_on_site/status сохранены, валидация дат не создаёт запись, confirm/reject меняют статус, signup → авторизован, login/logout работают, home = 200. Все 12 проверок прошли.
+
+**Не сделано / отложено:**
+- Живой рендер новых страниц в браузере не проверялся (нет браузера).
+- Замечание: наша локальная Postgres-БД в песочнице больше не поднимается (удалён бинарь); демо-проверки переведены на sqlite. PostGIS-проверка всё ещё требует машины основателя.
+
+**Заметки для следующей сессии:**
+- Этап 4 закрыт (4/4). Дальше — Этап 5 «Отзывы»: форма отзыва/оценки после регистрации + отображение рейтинга и отзывов на карточке места. Модель Review уже есть (Этап 1), рейтинг уже считается в API (`rating`, `reviews_count`).
+- Нужно закоммитить Этап 4 (не сделан в этой сессии — коммит `?`), обновить First commits список.
+- Изменено: templatetag лежит в `users/templatetags/localize.py` (не в kuhiston — он не в INSTALLED_APPS).
+
+---
+
 ## Сессия 11 — 2026-09-14
 **План:**
 - Задачи Этапа 3 «Маршруты» (PROJECT.md раздел 6):

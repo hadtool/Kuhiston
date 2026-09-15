@@ -45,6 +45,10 @@ header#site-header h1 {
   letter-spacing: 0.02em;
 }
 
+.site-nav { display: flex; gap: 12px; flex-wrap: wrap; }
+.site-nav a { color: var(--paper); text-decoration: none; font-size: 0.9rem; }
+.site-nav a:hover { color: var(--ochre-light); }
+
 .brand-tagline {
   margin: 0;
   font-size: 0.72rem;
@@ -246,6 +250,8 @@ header#site-header h1 {
   font: inherit; font-weight: 600;
 }
 .place-card__nav:hover { background: var(--ink-soft); }
+.place-card__book { text-decoration: none; background: var(--ochre); color: var(--white); }
+.place-card__book:hover { background: var(--ochre-light); }
 #nav-panel {
   position: absolute;
   top: 18px; right: 18px;

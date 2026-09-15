@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kuhiston 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-14 23:56+0500\n"
+"POT-Creation-Date: 2026-09-15 00:07+0500\n"
 "PO-Revision-Date: 2026-09-14\n"
 "Last-Translator: Kuhiston team <noreply@kuhiston.local>\n"
 "Language-Team: Tajik <noreply@kuhiston.local>\n"
@@ -14,6 +14,27 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: backend/booking/forms.py:14
+msgid "Иван Иванов"
+msgstr "Иван Иванов"
+
+#: backend/booking/forms.py:15
+msgid "Телефон или email"
+msgstr "Телефон ё e-mail"
+
+#: backend/booking/forms.py:26
+msgid "Дата выезда не может быть раньше даты заезда."
+msgstr "Сани баромад наметавонад аз сани вуруд пештар бошад."
+
+#: backend/booking/views.py:42
+msgid "Заявка отправлена! Владелец свяжется с вами."
+msgstr "Дархост фиристода шуд! Соҳиб бо шумо тамос мегирад."
+
+#: backend/booking/views.py:67
+#, python-format
+msgid "Заявка: %s."
+msgstr "Дархост: %s."
 
 #: backend/places/views.py:23 frontend/templates/home.html:26
 msgid "Определить моё местоположение"
@@ -104,16 +125,173 @@ msgid "Построить маршрут"
 msgstr "Масъирҳои омода"
 
 #: backend/places/views.py:44
+msgid "Забронировать рядом"
+msgstr "Фармоиш дар наздикӣ"
+
+#: backend/places/views.py:45
 msgid "Расстояние"
 msgstr "Масофа"
 
-#: backend/places/views.py:45
+#: backend/places/views.py:46
 msgid "Время"
 msgstr "Вақт"
 
-#: backend/places/views.py:46
+#: backend/places/views.py:47
 msgid "Маршрут по прямой (сервис недоступен)"
 msgstr "Роҳи рост (хизмат дастнорас аст)"
+
+#: frontend/templates/base.html:18
+#, fuzzy
+#| msgid "Карта мест"
+msgid "Карта"
+msgstr "Харитаи ҷойҳо"
+
+#: frontend/templates/base.html:19 frontend/templates/booking/objects.html:3
+#: frontend/templates/booking/objects.html:10
+msgid "Бронирование"
+msgstr "Фармоиш"
+
+#: frontend/templates/base.html:21
+msgid "Кабинет"
+msgstr "Кабинети соҳиб"
+
+#: frontend/templates/base.html:22
+msgid "Выйти"
+msgstr "Баромадан"
+
+#: frontend/templates/base.html:24 frontend/templates/booking/objects.html:28
+#: frontend/templates/registration/login.html:3
+#: frontend/templates/registration/login.html:10
+msgid "Вход"
+msgstr "Вуруд"
+
+#: frontend/templates/base.html:25 frontend/templates/booking/objects.html:29
+#: frontend/templates/registration/signup.html:3
+#: frontend/templates/registration/signup.html:10
+msgid "Регистрация"
+msgstr "Бақайдгирӣ"
+
+#: frontend/templates/booking/my_panel.html:3
+#: frontend/templates/booking/my_panel.html:10
+#: frontend/templates/booking/objects.html:23
+msgid "Мой кабинет"
+msgstr "Кабинети ман"
+
+#: frontend/templates/booking/my_panel.html:11
+msgid "Заявки на ваши объекты бронирования"
+msgstr "Дархостҳо ба объектҳои фармоишии шумо"
+
+#: frontend/templates/booking/my_panel.html:17
+msgid "Ваши объекты"
+msgstr "Объектҳои шумо"
+
+#: frontend/templates/booking/my_panel.html:25
+msgid "У вас пока нет объектов бронирования"
+msgstr "Шумо ҳанӯз объектҳои фармоиш надоред"
+
+#: frontend/templates/booking/my_panel.html:29
+msgid "Заявки"
+msgstr "Дархостҳо"
+
+#: frontend/templates/booking/my_panel.html:34
+msgid "Объект"
+msgstr "Объект"
+
+#: frontend/templates/booking/my_panel.html:35
+msgid "Турист"
+msgstr "Сайёҳ"
+
+#: frontend/templates/booking/my_panel.html:36
+msgid "Контакт"
+msgstr "Тамос"
+
+#: frontend/templates/booking/my_panel.html:37
+msgid "Даты"
+msgstr "Санаҳо"
+
+#: frontend/templates/booking/my_panel.html:38
+msgid "Статус"
+msgstr "Мақом"
+
+#: frontend/templates/booking/my_panel.html:39
+msgid "Действия"
+msgstr "Амалҳо"
+
+#: frontend/templates/booking/my_panel.html:46
+#, fuzzy
+#| msgid "Карта мест"
+msgid "оплата на месте"
+msgstr "Харитаи ҷойҳо"
+
+#: frontend/templates/booking/my_panel.html:52
+msgid "Подтвердить"
+msgstr "Таъйид кардан"
+
+#: frontend/templates/booking/my_panel.html:53
+msgid "Отклонить"
+msgstr "Рад кардан"
+
+#: frontend/templates/booking/my_panel.html:63
+#, fuzzy
+#| msgid "Рядом пока нет мест"
+msgid "Заявок пока нет"
+msgstr "Дар наздикӣ ҷойҳо нестанд"
+
+#: frontend/templates/booking/object_detail.html:10
+msgid "Назад к списку"
+msgstr "Ақиб ба рӯйхат"
+
+#: frontend/templates/booking/object_detail.html:19
+msgid "Места не указаны"
+msgstr "Ҷойҳо нишон дода нашудаанд"
+
+#: frontend/templates/booking/object_detail.html:23
+#, fuzzy
+#| msgid "Готовые маршруты"
+msgid "Оставить заявку"
+msgstr "Масъирҳои омода"
+
+#: frontend/templates/booking/object_detail.html:24
+msgid "Заявка без онлайн-оплаты — владелец свяжется с вами для подтверждения."
+msgstr "Дархост бе пардохти онлайн — соҳиб барои таъйид бо шумо тамос мегирад."
+
+#: frontend/templates/booking/object_detail.html:31
+msgid "Вы вошли как"
+msgstr "Шумо ҳамчун ворид шудаед"
+
+#: frontend/templates/booking/object_detail.html:63
+msgid "Отправить заявку"
+msgstr "Фиристодани дархост"
+
+#: frontend/templates/booking/objects.html:11
+msgid "Жильё, гиды, транспорт и рестораны рядом с местами"
+msgstr "Манзил, роҳнамоҳо, нақлиёт ва тарабхонаҳо дар наздикии ҷойҳо"
+
+#: frontend/templates/booking/objects.html:15
+#, fuzzy
+#| msgid "Рядом пока нет мест"
+msgid "Рядом с местом:"
+msgstr "Дар наздикӣ ҷойҳо нестанд"
+
+#: frontend/templates/booking/objects.html:17
+#, fuzzy
+#| msgid "Рядом пока нет мест"
+msgid "Рядом с местом"
+msgstr "Дар наздикӣ ҷойҳо нестанд"
+
+#: frontend/templates/booking/objects.html:17
+#, fuzzy
+#| msgid "Рядом пока нет мест"
+msgid "объектов пока нет"
+msgstr "Дар наздикӣ ҷойҳо нестанд"
+
+#: frontend/templates/booking/objects.html:27
+msgid "Чтобы оставлять заявки и отзывы, войдите или зарегистрируйтесь:"
+msgstr "Барои фиристодани дархостҳо ва тақризҳо, ворид шавед ё бақайд гиред:"
+
+#: frontend/templates/booking/objects.html:42
+msgid "Пока нет доступных объектов бронирования"
+msgstr "Ҳоло объектҳои дастраси фармоиш вуҷуд надоранд"
 
 #: frontend/templates/home.html:3
 msgid "Карта мест"
@@ -121,7 +299,7 @@ msgstr "Харитаи ҷойҳо"
 
 #: frontend/templates/home.html:15
 msgid "Карта ещё не подключена: не задан ключ MapTiler в настройках."
-msgstr ""
+msgstr "Харита пайваст нашудааст: калиди MapTiler дар танзимот муайян нашудааст."
 "Харита пайваст нашудааст: калиди MapTiler дар танзимот гузошта нашудааст."
 
 #: frontend/templates/home.html:19
@@ -143,6 +321,24 @@ msgstr "Релефи 3D"
 #: frontend/templates/home.html:43
 msgid "Ближайшие места"
 msgstr "Ҷойҳои наздиктарин"
+
+#: frontend/templates/registration/login.html:24
+#: frontend/templates/registration/signup.html:35
+msgid "Войти"
+msgstr "Вуруд"
+
+#: frontend/templates/registration/login.html:28
+msgid "Нет аккаунта?"
+msgstr "Ҳисоб надоред?"
+
+#: frontend/templates/registration/login.html:28
+#: frontend/templates/registration/signup.html:32
+msgid "Зарегистрироваться"
+msgstr "Бақайд гиред"
+
+#: frontend/templates/registration/signup.html:35
+msgid "Уже есть аккаунт?"
+msgstr "Аллакай ҳисоб доред?"
 
 #~ msgid "Туристическое приложение по Таджикистану"
 #~ msgstr "Барномаи туристии Тоҷикистон"

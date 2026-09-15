@@ -1,10 +1,11 @@
-{% load i18n %}
+{% load i18n static %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
 <meta charset="UTF-8">
 <title>{% block title %}{{ brand_name }}{% endblock %}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
 {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -13,6 +14,17 @@
     <h1>{{ brand_name }}</h1>
     <p class="brand-tagline">{{ brand_tagline }}</p>
   </div>
+  <nav class="site-nav">
+    <a href="{% url 'home' %}">{% trans "Карта" %}</a>
+    <a href="{% url 'booking:object_list' %}">{% trans "Бронирование" %}</a>
+    {% if user.is_authenticated %}
+      {% if user.is_place_owner %}<a href="{% url 'booking:my_panel' %}">{% trans "Кабинет" %}</a>{% endif %}
+      <a href="{% url 'users:logout' %}">{% trans "Выйти" %} ({{ user.username }})</a>
+    {% else %}
+      <a href="{% url 'users:login' %}">{% trans "Вход" %}</a>
+      <a href="{% url 'users:signup' %}">{% trans "Регистрация" %}</a>
+    {% endif %}
+  </nav>
   <form class="lang-form" action="{% url 'set_language' %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="next" value="{{ request.path }}">

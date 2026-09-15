@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load i18n static localize %}
+{% block title %}{% trans "Мой кабинет" %} — {{ brand_name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/page.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1 class="page-title">{% trans "Мой кабинет" %}</h1>
+<p class="page-meta">{% trans "Заявки на ваши объекты бронирования" %}</p>
+
+{% if messages %}
+<ul class="messages">{% for message in messages %}<li>{{ message }}</li>{% endfor %}</ul>
+{% endif %}
+
+<h2 class="page-title" style="font-size:1.15rem">{% trans "Ваши объекты" %}</h2>
+<div class="grid">
+{% for obj in my_objects %}
+  <a class="card" href="{% url 'booking:object_detail' obj.pk %}">
+    <span class="badge">{{ obj.category|get_name:LANGUAGE_CODE }}</span>
+    <h3>{{ obj|get_name:LANGUAGE_CODE }}</h3>
+  </a>
+{% empty %}
+  <p>{% trans "У вас пока нет объектов бронирования" %}</p>
+{% endfor %}
+</div>
+
+<h2 class="page-title" style="font-size:1.15rem">{% trans "Заявки" %}</h2>
+{% if requests %}
+<table>
+  <thead>
+    <tr>
+      <th>{% trans "Объект" %}</th>
+      <th>{% trans "Турист" %}</th>
+      <th>{% trans "Контакт" %}</th>
+      <th>{% trans "Даты" %}</th>
+      <th>{% trans "Статус" %}</th>
+      <th>{% trans "Действия" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for r in requests %}
+    <tr>
+      <td>{{ r.booking_object|get_name:LANGUAGE_CODE }}</td>
+      <td>{{ r.tourist_name }}{% if r.pay_on_site %} <span title="{% trans 'оплата на месте' %}">💵</span>{% endif %}</td>
+      <td>{{ r.tourist_contact }}</td>
+      <td>{{ r.check_in|date:"d.m" }}–{{ r.check_out|date:"d.m" }}</td>
+      <td>{{ r.get_status_display }}</td>
+      <td>
+        {% if r.status == "new" %}
+          <a class="btn small ochre" href="{% url 'booking:set_status' r.pk 'confirmed' %}">{% trans "Подтвердить" %}</a>
+          <a class="btn small ghost" href="{% url 'booking:set_status' r.pk 'rejected' %}">{% trans "Отклонить" %}</a>
+        {% else %}
+          —
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>{% trans "Заявок пока нет" %}</p>
+{% endif %}
+{% endblock %}

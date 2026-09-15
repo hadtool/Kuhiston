@@ -1,0 +1,25 @@
+:root {
+  --ink: #1a2740;
+  --ink-soft: #24365a;
+  --ochre: #c98a2c;
+  --ochre-light: #dba24f;
+  --paper: #fbf7ef;
+  --muted: #5a6478;
+  --white: #ffffff;
+  --border: #e6dfd1;
+  --bg: #f4efe4;
+  --font-display: "Fraunces", Georgia, serif;
+  --shadow: 0 4px 16px rgba(26, 39, 64, 0.25);
+  --radius: 14px;
+}
+html, body { margin:0; font-family: "Manrope", system-ui, sans-serif; color: var(--ink); background: var(--paper); }
+header#site-header { position: sticky; top:0; z-index:600; display:flex; align-items:center; justify-content:space-between; padding: 12px 18px; background:var(--ink); color:var(--white); }
+header#site-header h1 { margin:0; font-family: var(--font-display); font-size:1.2rem; }
+header#site-header p.brand-tagline { margin:0; font-size:0.8rem; color:var(--ochre-light); }
+.site-nav { display:flex; gap:12px; margin-right:14px; flex-wrap:wrap; }
+.site-nav a { color:var(--white); text-decoration:none; font-size:0.9rem; }
+.site-nav a:hover { color:var(--ochre-light); }
+.lang-form { display:flex; }
+.lang-form select { background:transparent; color:var(--white); border:1px solid rgba(255,255,255,.3); border-radius:8px; padding:4px 8px; font:inherit; }
+.lang-form select option { color:var(--ink); background:var(--white); }
+main { max-width:960px; margin: 0 auto; padding: 24px 16px 40px; }
