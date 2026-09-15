@@ -18,7 +18,7 @@ services:
         value: "*"
       - key: DJANGO_SECRET_KEY
         sync: false
-      - key: MAPTILER_API_KEY
+      - key: ZxtfUL3Th4py6XWdwgTR
         sync: false
       - key: DATABASE_URL
         sync: false
