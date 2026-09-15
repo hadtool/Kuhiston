@@ -1,0 +1,26 @@
+# Render — Web Service для бэкенда Django.
+# https://render.com/docs/yaml-spec
+services:
+  - type: web
+    name: kuhiston
+    runtime: python
+    plan: free
+    buildCommand: |
+      pip install -r backend/requirements.txt
+      cd backend && python manage.py collectstatic --noinput
+      cd backend && python manage.py migrate --noinput
+    startCommand: gunicorn kuhiston.wsgi --chdir backend --bind 0.0.0.0:$PORT
+    healthCheckPath: /api/categories/
+    envVars:
+      - key: DJANGO_DEBUG
+        value: "0"
+      - key: DJANGO_ALLOWED_HOSTS
+        value: "*"
+      - key: DJANGO_SECRET_KEY
+        sync: false
+      - key: MAPTILER_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: DONATE_URL
+        sync: false

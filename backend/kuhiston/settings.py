@@ -41,6 +41,9 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get('DJANGO_DEBUG', '1') == '1'
 
 ALLOWED_HOSTS = [h.strip() for h in os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if h.strip()]
+# Render (бесплатный хостинг) даёт внешний хост переменной окружения.
+if os.environ.get('RENDER_EXTERNAL_HOSTNAME'):
+    ALLOWED_HOSTS += [os.environ['RENDER_EXTERNAL_HOSTNAME']]
 if DEBUG:
     ALLOWED_HOSTS += ['testserver']
 
@@ -63,6 +66,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # WhiteNoise — раздача статики в проде (Render и т.п.), после SecurityMiddleware.
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -172,11 +177,27 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+# Куда collectstatic складывает собранные файлы для продакшена.
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_DIRS = [
     PROJECT_ROOT / 'frontend' / 'static',
 ]
+
+# WhiteNoise: сжатие + хэшированные имена (устаревшие версии автоматически вычищаются).
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
+
+# В проде (DEBUG=False) статику и CDN-оплату среди сборок не хранить.
+WHITENOISE_MAX_AGE = 60 * 60 * 24 * 365
 
 # Загруженные файлы (фотографии мест) — на фронтенде в dev режиме.
 MEDIA_URL = '/media/'

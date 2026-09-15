@@ -1,0 +1,1 @@
+web: backend/.venv/bin/gunicorn kuhiston.wsgi --chdir backend --bind 0.0.0.0:$PORT
