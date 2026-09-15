@@ -13,6 +13,39 @@
 
 ---
 
+## Сессия 16 — 2026-09-15
+**План:**
+- Жалоба основателя: страница на живом деплое открывается, но выглядит сломанной — видны «шаблонные теги» как текст ({{ }}/{% %}), нет цветов/карты/кнопок (CSS/JS не грузятся).
+- Проверить: наследование шаблонов и {% load %}; раздачу статики (collectstatic/whitenoise/STATIC_ROOT/STATIC_URL); передачу MapTiler-ключа из env в JS.
+
+**Сделано:**
+- **Рендер шаблонов — чистый** (проверено тест-клиентом при `DEBUG=False`, как проде): на всех страницах (/, /booking/, /donate/, /api/categories/) нет ни одного «сырого» `{%`/`{{`. Все 8 шаблонов корректно делают `{% extends "base.html" %}` + `{% load i18n static (localize) %}` в первой строке. «Шаблонные теги как текст» — это НЕ рендер Django: так выглядит страница, когда файлы `frontend/templates/*.html` раздаются напрямую статическим сервером (например, если на Render создан Static Site, а не Web Service, или запущен некорректный nginx, который отдаёт исходники .html без обработки Django). Если же деплой — настоящий Django Web Service, теги не могут показаться.
+- **Статика: найдены и исправлены реальные баги продакшн-конфигурации** (они и дают «нет цветов/карты/кнопок»):
+  1. `STATIC_URL` был `'static/'` (без ведущего слэша) → на внутренних страницах ссылки уезжали; теперь `'/static/'`.
+  2. Не было `STATIC_ROOT` → `collectstatic` в проде упал бы/не собрал бы файлы; добавлен `STATIC_ROOT = BASE_DIR / 'staticfiles'`.
+  3. Не было WhiteNoise → при `DEBUG=False` (прод) Django сам не раздаёт статику, и CSS/JS отдают 404 (или доставляет кто-то другой). Добавлен `whitenoise` в requirements и `whitenoise.middleware.WhiteNoiseMiddleware` в MIDDLEWARE (сразу после SecurityMiddleware), `STORAGES['staticfiles'] = whitenoise.storage.CompressedManifestStaticFilesStorage`, `WHITENOISE_MAX_AGE`.
+  4. Нет `collectstatic` в деплой-процедуре → добавлен `render.yaml` (render.com blueprint): Web Service Python, build = pip install + `collectstatic --noinput` + `migrate --noinput`, start = gunicorn, healthCheckPath=/api/categories/, env DJANGO_DEBUG=0 + secrets (SECRET_KEY, DATABASE_URL, MAPTILER_API_KEY, DONATE_URL).
+  5. Нет gunicorn в requirements → добавлен (`gunicorn==23.0.0`), создан `Procfile`.
+  6. `ALLOWED_HOSTS` теперь автоматически принимают `RENDER_EXTERNAL_HOSTNAME` (хост Render).
+- Проверено локально при `DEBUG=False` через тест-клиент: `collectstatic` собирает (162 файла, 468 post-processed), WhiteNoise отдаёт css/js/sw.js (200, правильные Content-Type), `{% static %}` дают хэшированные URL (`/static/css/map.7ee6588851ef.css` и т.п.), sw.js и оригинальные пути тоже 200.
+- **MapTiler-ключ — поток подтверждён** (сквозной, от env до JS):
+  1. `settings.MAPTILER_API_KEY = os.environ.get('MAPTILER_API_KEY', '')` (settings.py);
+  2. `places/views.py` кладёт его в контекст `home()` как `maptiler_api_key`;
+  3. `home.html`: `<div id="map-page" data-maptiler-key="{{ maptiler_api_key }}">` (если ключа нет — показывается `#map-notice`);
+  4. `map.js`: `const apiKey = page.dataset.maptilerKey || "";` затем `new maptilersdk.Map({ apiKey, ... })`.
+  Проверено тест-клиентом с `MAPTILER_API_KEY=test_key_xyz`: в HTML `data-maptiler-key="test_key_xyz"`. **Ключ в исходниках НЕ хардкодится** — только env-переменная.
+- Коммиты: `a00d146` (деплой-конфиг) + хеш для доков.
+
+**Не сделано / отложено:**
+- Живой деплой проверить не смог: в репозитории/окружении нет URL Render-сервиса и нет доступа к его консоли. Нужен от основателя URL деплоя (и подтверждение, что это Web Service, а не Static Site).
+- Проверка реального `MAPTILER_API_KEY` на Render — за основателем (в render.yaml переменная помечена `sync: false`, значение вводится вручную в Dashboard).
+
+**Заметки для следующей сессии:**
+- Если на Render создана «Static Site» (раздающая папку frontend/templates или весь репозиторий) — это ровно та причина «сырых тегов»: нужен **Web Service** (см. render.yaml), а не Static Site.
+- После передеплоя прогнать: `curl <url>/` (нет `{%`/`{{`), `curl <url>/static/css/base.css` (200), `curl <url>/api/categories/` (200 JSON), ключ в DOM.
+
+---
+
 ## Сессия 15 — 2026-09-15
 **План:**
 - Этап 7 «Монетизация (лёгкая)»: 1) платное продвижение места в топ выдачи (админ включает вручную), 2) страница/кнопка для донатов туристов.
