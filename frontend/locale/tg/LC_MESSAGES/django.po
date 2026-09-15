@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kuhiston 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 20:26+0500\n"
+"POT-Creation-Date: 2026-09-15 20:44+0500\n"
 "PO-Revision-Date: 2026-09-14\n"
 "Last-Translator: Kuhiston team <noreply@kuhiston.local>\n"
 "Language-Team: Tajik <noreply@kuhiston.local>\n"
@@ -40,7 +40,7 @@ msgstr "Дархост: %s."
 msgid "Определить моё местоположение"
 msgstr "Ҷойи манро муайян кун"
 
-#: backend/places/views.py:24 frontend/templates/home.html:32
+#: backend/places/views.py:24 frontend/templates/home.html:33
 msgid "Точка выбрана — нажмите ещё раз, чтобы убрать"
 msgstr "Нуқта интихоб шуд — барои тоза кардан боз зер кунед"
 
@@ -175,6 +175,45 @@ msgstr "Ташаккур! Тақриз нигоҳ дошта шуд"
 #: backend/places/views.py:57
 msgid "Не удалось сохранить отзыв"
 msgstr "Гирифтани маълумот нарасид"
+
+#: backend/places/views.py:58 frontend/templates/home.html:30
+#: frontend/templates/home.html:57
+msgid "Офлайн-режим"
+msgstr "Реҷаи офлайн"
+
+#: backend/places/views.py:59 frontend/templates/home.html:58
+msgid "Скачайте карту и данные региона — они будут доступны без интернета."
+msgstr "Харита ва маълумоти минтақаро боргирӣ кунед — онҳо бе интернет кор мекунанд."
+
+#: backend/places/views.py:60
+msgid "Скачать"
+msgstr "Боргирӣ"
+
+#: backend/places/views.py:61
+#, fuzzy
+msgid "Скачивание…"
+msgstr "Боргирӣ идома дорад…"
+
+#: backend/places/views.py:62
+msgid "Сохранено офлайн"
+msgstr "Офлайн захира шуд"
+
+#: backend/places/views.py:63
+msgid "Удалить"
+msgstr "Нест кардан"
+
+#: backend/places/views.py:64
+msgid "Доступно офлайн"
+msgstr "Ҳоло офлайн дастрас аст"
+
+#: backend/places/views.py:65
+#, fuzzy
+msgid "Регионы не найдены"
+msgstr "Минтақаҳо ёфт нашуд"
+
+#: backend/places/views.py:66
+msgid "мест(а)"
+msgstr "ҷой(ҳо)"
 
 #: frontend/templates/base.html:18
 msgid "Карта"
@@ -330,11 +369,11 @@ msgstr ""
 msgid "Все"
 msgstr "Ҳама"
 
-#: frontend/templates/home.html:27 frontend/templates/home.html:50
+#: frontend/templates/home.html:27 frontend/templates/home.html:51
 msgid "Маршрут"
 msgstr "Масъир"
 
-#: frontend/templates/home.html:28 frontend/templates/home.html:36
+#: frontend/templates/home.html:28 frontend/templates/home.html:37
 msgid "Готовые маршруты"
 msgstr "Масъирҳои омода"
 
@@ -342,7 +381,7 @@ msgstr "Масъирҳои омода"
 msgid "3D-рельеф"
 msgstr "Релефи 3D"
 
-#: frontend/templates/home.html:43
+#: frontend/templates/home.html:44
 msgid "Ближайшие места"
 msgstr "Ҷойҳои наздиктарин"
 

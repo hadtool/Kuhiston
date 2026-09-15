@@ -6,11 +6,12 @@ from rest_framework.views import APIView
 
 from kuhiston.routing import haversine_km, osrm_route
 
-from .models import Place, PlaceCategory, Review
+from .models import Place, PlaceCategory, Region, Review
 from .serializers import (
     PlaceCategorySerializer,
     PlaceDetailSerializer,
     PlaceListSerializer,
+    RegionSerializer,
     ReviewSerializer,
     SimpleRoutePointSerializer,
 )
@@ -181,6 +182,48 @@ class PlaceReviewsView(APIView):
             defaults={"rating": rating, "text": request.data.get("text", "")},
         )
         return Response(ReviewSerializer(obj, context={"request": request}).data, status=201)
+
+
+class OfflineRegionsView(generics.ListAPIView):
+    """Список регионов для офлайн-скачивания (Этап 6)."""
+
+    queryset = Region.objects.prefetch_related("places")
+    serializer_class = RegionSerializer
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx["language"] = getattr(self.request, "LANGUAGE_CODE", "ru")
+        return ctx
+
+
+class OfflineRegionBundleView(APIView):
+    """Офлайн-бандл региона: сам регион, границы и все опубликованные места (с фото)."""
+
+    def get(self, request, pk):
+        region = Region.objects.filter(pk=pk).prefetch_related("places").first()
+        if not region:
+            return Response(status=404)
+        language = getattr(request, "LANGUAGE_CODE", "ru")
+        places = list(region.places.filter(moderation_status="published").select_related("category", "region").prefetch_related("photos"))
+        for p in places:
+            p.distance_km = None
+        data = PlaceDetailSerializer(places, many=True, context={"request": request, "language": language}).data
+        bounds = None
+        if places:
+            bounds = {
+                "lat_min": min(float(p.latitude) for p in places),
+                "lat_max": max(float(p.latitude) for p in places),
+                "lng_min": min(float(p.longitude) for p in places),
+                "lng_max": max(float(p.longitude) for p in places),
+            }
+        return Response(
+            {
+                "region": RegionSerializer(region, context={"language": language}).data,
+                "bounds": bounds,
+                "count": len(data),
+                "places": data,
+            }
+        )
 
 
 class NavigationRouteView(APIView):

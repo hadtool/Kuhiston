@@ -55,6 +55,15 @@ def home(request):
         "review_logged_in_need": _("Войдите, чтобы оставить отзыв"),
         "review_saved": _("Спасибо! Отзыв сохранён"),
         "review_fail": _("Не удалось сохранить отзыв"),
+        "offline_btn": _("Офлайн-режим"),
+        "offline_hint": _("Скачайте карту и данные региона — они будут доступны без интернета."),
+        "offline_download": _("Скачать"),
+        "offline_downloading": _("Скачивание…"),
+        "offline_saved_ok": _("Сохранено офлайн"),
+        "offline_remove": _("Удалить"),
+        "offline_cached": _("Доступно офлайн"),
+        "offline_empty": _("Регионы не найдены"),
+        "offline_places": _("мест(а)"),
     }
     context = {
         "maptiler_api_key": settings.MAPTILER_API_KEY,

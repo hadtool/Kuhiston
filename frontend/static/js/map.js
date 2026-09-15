@@ -126,6 +126,8 @@
       renderMarkers(data || []);
     } catch (err) {
       console.error("loadPlaces:", err);
+      const cached = offlineCachedPlaces();
+      if (cached.length) renderMarkers(cached);
     }
   }
 
@@ -156,6 +158,8 @@
       renderPlaceCard(p);
     } catch (err) {
       console.error("openPlaceCard:", err);
+      const cached = offlineCachedPlaces().find((p) => p.id === id);
+      if (cached) renderPlaceCard(cached);
     }
   }
 
@@ -572,6 +576,151 @@
   document.getElementById("nav-close").addEventListener("click", () => {
     navPanel.hidden = true;
     drawNavLine([]);
+  });
+
+  /* ---------- офлайн-режим (Этап 6) ---------- */
+  const OFFLINE_PREFIX = "kuh.offline.v1.";
+  const btnOffline = document.getElementById("btn-offline");
+  const offlinePanel = document.getElementById("offline-panel");
+  const offlineRegions = document.getElementById("offline-regions");
+  const offlineCacheInfo = document.getElementById("offline-cache-info");
+  const offlineBadge = document.getElementById("offline-badge");
+
+  function offlineSaved() {
+    const saved = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith(OFFLINE_PREFIX)) {
+        try {
+          saved.push(JSON.parse(localStorage.getItem(key)));
+        } catch { /* ignore */ }
+      }
+    }
+    return saved;
+  }
+
+  function offlineCachedPlaces() {
+    return offlineSaved().flatMap((b) => b.places || []);
+  }
+
+  function updateOfflineBadge() {
+    const saved = offlineSaved();
+    if (saved.length) {
+      const names = saved.map((b) => b.region.name).join(", ");
+      offlineBadge.textContent = `${I18N.offline_cached}: ${names}`;
+      offlineBadge.hidden = false;
+    } else {
+      offlineBadge.hidden = true;
+    }
+    return saved;
+  }
+
+  async function downloadRegion(region) {
+    try {
+      const resp = await fetch(`/api/offline/regions/${region.id}/`, { headers: { Accept: "application/json" } });
+      if (!resp.ok) throw new Error(resp.status);
+      const bundle = await resp.json();
+      localStorage.setItem(OFFLINE_PREFIX + region.code, JSON.stringify(bundle));
+      precacheRegionTiles(bundle).catch(() => {});
+      renderOffline();
+    } catch (err) {
+      console.error("downloadRegion:", err);
+    }
+  }
+
+  async function precacheRegionTiles(bundle) {
+    if (!bundle.bounds || !apiKey || typeof caches === "undefined") return;
+    const cache = await caches.open(`kuh.tiles.${bundle.region.code}`);
+    const { lat_min, lat_max, lng_min, lng_max } = bundle.bounds;
+    const zoomLevels = [5, 8, 10];
+    for (const z of zoomLevels) {
+      const x1 = Math.floor(((lng_min + 180) / 360) * 2 ** z);
+      const x2 = Math.floor(((lng_max + 180) / 360) * 2 ** z);
+      const y1 = Math.floor(((1 - Math.log(Math.tan((lat_max * Math.PI) / 180) + 1 / Math.cos((lat_max * Math.PI) / 180)) / Math.PI) / 2) * 2 ** z);
+      const y2 = Math.floor(((1 - Math.log(Math.tan((lat_min * Math.PI) / 180) + 1 / Math.cos((lat_min * Math.PI) / 180)) / Math.PI) / 2) * 2 ** z);
+      for (let x = Math.min(x1, x2); x <= Math.max(x1, x2); x++) {
+        for (let y = Math.min(y1, y2); y <= Math.max(y1, y2); y++) {
+          const url = `https://api.maptiler.com/maps/streets-v2/${z}/${x}/${y}.png?key=${apiKey}`;
+          try { await cache.add(url); } catch { /* пропускаем недоступный тайл */ }
+        }
+      }
+    }
+  }
+
+  function removeRegion(code) {
+    localStorage.removeItem(OFFLINE_PREFIX + code);
+    renderOffline();
+  }
+
+  function renderOffline() {
+    const saved = updateOfflineBadge();
+    if (saved.length) {
+      const names = saved.map((b) => `${b.region.name} (${b.places.length} ${I18N.offline_places})`).join(", ");
+      offlineCacheInfo.textContent = names;
+      offlineCacheInfo.hidden = false;
+    } else {
+      offlineCacheInfo.hidden = true;
+    }
+    if (offlinePanel.hidden) return;
+
+    offlineRegions.innerHTML = "";
+    fetch("/api/offline/regions/", { headers: { Accept: "application/json" } })
+      .then((resp) => resp.json())
+      .catch(() => [])
+      .then((regions) => {
+        if (!regions.length) {
+          offlineRegions.innerHTML = `<li class="route-list__item muted">${I18N.offline_empty}</li>`;
+          return;
+        }
+        regions.forEach((r) => {
+          const li = document.createElement("li");
+          li.className = "route-list__item";
+          const isSaved = saved.some((b) => b.region.code === r.code);
+          li.innerHTML = `
+            <span class="route-list__name">${escapeHtml(r.name)} · ${r.places_count} ${I18N.offline_places}</span>`;
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "btn small " + (isSaved ? "ghost" : "ochre");
+          btn.textContent = isSaved ? I18N.offline_remove : `${I18N.offline_download} ${isSaved ? "" : "↧"}`;
+          btn.addEventListener("click", () => {
+            if (isSaved) {
+              removeRegion(r.code);
+            } else {
+              btn.textContent = I18N.offline_downloading;
+              downloadRegion(r).then(() => {
+                if (btn.isConnected) btn.textContent = I18N.offline_saved_ok;
+              });
+            }
+          });
+          li.appendChild(btn);
+          offlineRegions.appendChild(li);
+        });
+      });
+  }
+
+  btnOffline.addEventListener("click", () => {
+    if (!offlinePanel.hidden) {
+      offlinePanel.hidden = true;
+      return;
+    }
+    offlinePanel.hidden = false;
+    renderOffline();
+  });
+
+  document.getElementById("offline-close").addEventListener("click", () => {
+    offlinePanel.hidden = true;
+  });
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/static/js/sw.js").catch(() => {});
+  }
+
+  window.addEventListener("offline", () => {
+    offlinePanel.hidden = true;
+    loadPlaces();
+  });
+  window.addEventListener("online", () => {
+    loadPlaces();
   });
 
   /* ---------- вспомогательное ---------- */

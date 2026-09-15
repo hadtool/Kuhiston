@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kuhiston 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 20:26+0500\n"
+"POT-Creation-Date: 2026-09-15 20:44+0500\n"
 "PO-Revision-Date: 2026-09-14\n"
 "Last-Translator: Kuhiston team <noreply@kuhiston.local>\n"
 "Language-Team: Russian <noreply@kuhiston.local>\n"
@@ -41,7 +41,7 @@ msgstr "Заявка: %s."
 msgid "Определить моё местоположение"
 msgstr "Определить моё местоположение"
 
-#: backend/places/views.py:24 frontend/templates/home.html:32
+#: backend/places/views.py:24 frontend/templates/home.html:33
 msgid "Точка выбрана — нажмите ещё раз, чтобы убрать"
 msgstr "Точка выбрана — нажмите ещё раз, чтобы убрать"
 
@@ -176,6 +176,45 @@ msgstr "Спасибо! Отзыв сохранён"
 #: backend/places/views.py:57
 msgid "Не удалось сохранить отзыв"
 msgstr "Не удалось получить данные"
+
+#: backend/places/views.py:58 frontend/templates/home.html:30
+#: frontend/templates/home.html:57
+msgid "Офлайн-режим"
+msgstr "Офлайн-режим"
+
+#: backend/places/views.py:59 frontend/templates/home.html:58
+msgid "Скачайте карту и данные региона — они будут доступны без интернета."
+msgstr "Скачайте карту и данные региона — они будут доступны без интернета."
+
+#: backend/places/views.py:60
+msgid "Скачать"
+msgstr "Скачать"
+
+#: backend/places/views.py:61
+#, fuzzy
+msgid "Скачивание…"
+msgstr "Скачивание…"
+
+#: backend/places/views.py:62
+msgid "Сохранено офлайн"
+msgstr "Сохранено офлайн"
+
+#: backend/places/views.py:63
+msgid "Удалить"
+msgstr "Удалить"
+
+#: backend/places/views.py:64
+msgid "Доступно офлайн"
+msgstr "Доступно офлайн"
+
+#: backend/places/views.py:65
+#, fuzzy
+msgid "Регионы не найдены"
+msgstr "Регионы не найдены"
+
+#: backend/places/views.py:66
+msgid "мест(а)"
+msgstr "мест(а)"
 
 #: frontend/templates/base.html:18
 msgid "Карта"
@@ -328,11 +367,11 @@ msgstr "Карта ещё не подключена: не задан ключ Ma
 msgid "Все"
 msgstr "Все"
 
-#: frontend/templates/home.html:27 frontend/templates/home.html:50
+#: frontend/templates/home.html:27 frontend/templates/home.html:51
 msgid "Маршрут"
 msgstr "Маршрут"
 
-#: frontend/templates/home.html:28 frontend/templates/home.html:36
+#: frontend/templates/home.html:28 frontend/templates/home.html:37
 msgid "Готовые маршруты"
 msgstr "Готовые маршруты"
 
@@ -340,7 +379,7 @@ msgstr "Готовые маршруты"
 msgid "3D-рельеф"
 msgstr "3D-рельеф"
 
-#: frontend/templates/home.html:43
+#: frontend/templates/home.html:44
 msgid "Ближайшие места"
 msgstr "Ближайшие места"
 

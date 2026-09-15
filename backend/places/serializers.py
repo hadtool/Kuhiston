@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Place, PlaceCategory, PlacePhoto, Review
+from .models import Place, PlaceCategory, PlacePhoto, Region, Review
 
 
 class PlaceCategorySerializer(serializers.ModelSerializer):
@@ -162,3 +162,20 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     def get_author(self, obj):
         return obj.author.username if obj.author else ""
+
+
+class RegionSerializer(serializers.ModelSerializer):
+    """Регион для офлайн-скачивания (Этап 6)."""
+
+    name = serializers.SerializerMethodField()
+    places_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Region
+        fields = ["id", "code", "name", "places_count"]
+
+    def get_name(self, obj):
+        return obj.get_name(self.context["language"])
+
+    def get_places_count(self, obj):
+        return obj.places.filter(moderation_status="published").count()

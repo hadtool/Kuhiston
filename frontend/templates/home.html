@@ -27,6 +27,7 @@
     <button id="btn-route" title="{% trans 'Маршрут' %}">🗺</button>
     <button id="btn-routes" title="{% trans 'Готовые маршруты' %}">🎒</button>
     <button id="btn-3d" title="{% trans '3D-рельеф' %}">🏔</button>
+    <button id="btn-offline" title="{% trans 'Офлайн-режим' %}">📶</button>
   </div>
 
   <div id="user-marker-hint" hidden>{% trans "Точка выбрана — нажмите ещё раз, чтобы убрать" %}</div>
@@ -50,6 +51,16 @@
     <h3 class="route-panel__title">{% trans "Маршрут" %}</h3>
     <div id="nav-info"></div>
   </aside>
+
+  <aside id="offline-panel" hidden>
+    <button class="place-card__close" id="offline-close">×</button>
+    <h3 class="route-panel__title">{% trans "Офлайн-режим" %}</h3>
+    <p class="route-panel__hint">{% trans "Скачайте карту и данные региона — они будут доступны без интернета." %}</p>
+    <div id="offline-cache-info" class="offline-cache-info" hidden></div>
+    <ul id="offline-regions" class="route-list"></ul>
+  </aside>
+
+  <div id="offline-badge" hidden></div>
 
   <aside id="place-card" hidden></aside>
 </div>

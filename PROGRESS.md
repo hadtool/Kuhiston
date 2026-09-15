@@ -13,6 +13,37 @@
 
 ---
 
+## Сессия 14 — 2026-09-15
+**План:**
+- Этап 6 «Офлайн-режим» (PROJECT.md раздел 8): 1) скачивание тайлов карты по выбранному региону (офлайн-кэш), 2) скачивание данных о местах по региону в локальное хранилище, 3) индикатор «доступно офлайн» в интерфейсе.
+
+**Сделано:**
+- Backend (API офлайн-бандлов):
+  - `RegionSerializer` в `places/serializers.py` — id/code/name (на языке запроса)/places_count (только опубликованные).
+  - `OfflineRegionsView` (`GET /api/offline/regions/`) — список регионов для скачивания.
+  - `OfflineRegionBundleView` (`GET /api/offline/regions/<pk>/`) — `{region, bounds:{lat/lng min/max из мест}, count, places[]}`; места — полные `PlaceDetailSerializer` (название/описание на языке запроса, категория, координаты, фото, рейтинг); для пустого региона `bounds: null`. 404 для несуществующего pk.
+  - URL добавлены в `backend/kuhiston/urls.py`.
+- Фронтенд (`frontend/templates/home.html`, `frontend/static/js/map.js`, `frontend/static/css/map.css`):
+  - Кнопка `#btn-offline` (📶) в панели действий; панель `#offline-panel` — список регионов с количеством мест и кнопкой «Скачать» (после скачивания — «Удалить»).
+  - `downloadRegion()` — выборка бандла в localStorage (`kuh.offline.v1.<code>`), затем `precacheRegionTiles()` — тайлы MapTiler (`streets-v2/{z}/{x}/{y}.png?key=`) в Cache API по bbox региона для zoom 5/8/10.
+  - `offlineSaved()/offlineCachedPlaces()` — чтение кэша; фолбэк: при падении `/api/places/` рендерятся маркеры из кэша, при падении `/api/places/<id>/` карточка места открывается из кэша.
+  - Индикатор: бейдж `#offline-badge` «Доступно офлайн: <регионы>» + блок `#offline-cache-info` со списком скачанных регионов; слушатели `online`/`offline` перезагружают места.
+  - Service worker `frontend/static/js/sw.js` (кэш shell `kuhiston-shell-v1`: base.css/map.css/map.js, кэширование статики same-origin, тайлы maptiler отдаются из Cache API при наличии), регистрируется из map.js.
+  - Стили `.offline-cache-info`, `#offline-badge`, `.btn.small/.ochre/.ghost` в map.css.
+- Новые ключи `js_strings` (offline_btn, offline_hint, offline_download, offline_downloading, offline_saved_ok, offline_remove, offline_cached, offline_empty, offline_places) + переводы 9 строк (ru — identity, en/tg переведены), fuzzy-флаги сняты, `compilemessages` выполнен.
+- Проверено тест-клиентом (sqlite): `/api/offline/regions/` = 200 (массив с name/places_count, язык переключается), бандл = 200 (region/bounds/count/places, пустой регион → bounds null, 404 для чужого pk), `/` рендерится и содержит `btn-offline`, `offline-panel`, `offline-badge` и все ключи офлайн в js_strings. `manage.py check` (0 silenced) и `makemigrations --check` без изменений.
+
+**Не сделано / отложено:**
+- Живое скачивание тайлов/офлайн-карты в браузере не проверить (нет браузера и сети MapTiler с ключом); сетевой код (precacheRegionTiles, sw.js) проверен только чтением. Проверка у основателя в браузере с реальным ключом.
+- Фотографии для офлайна: кэшируются исходные URL бандла, сжатые версии для офлайн-кэша (PROJECT.md 8.3) — как отдельная задача, не была в TASKS.
+
+**Заметки для следующей сессии:**
+- Этап 6 закрыт (3/3). Осталось: Этап 0 (PostGIS, блокер машины основателя), Этап 7 «Монетизация» (2 задачи: платное продвижение — админ включает вручную; кнопка/страница донатов).
+- Офлайн-данные лежат в localStorage под `kuh.offline.v1.*`; тайлы — Cache API `kuh.tiles.<code>`; shell — `kuhiston-shell-v1`.
+- Коммит Этапа 6 в этой сессии не сделан — дописать хеш.
+
+---
+
 ## Сессия 10 — 2026-09-14
 **План:**
 - Этап 2, задача 1: «Интеграция MapTiler на фронтенде (2D режим, живой стиль)» — PROJECT.md раздел 9.
