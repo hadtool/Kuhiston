@@ -1,8 +1,15 @@
 from django.conf import settings
-from django.shortcuts import render
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
+from django.db import transaction
+from django.shortcuts import redirect, render
 from django.utils.translation import gettext as _
 
-from .models import PlaceCategory
+from kuhiston.moderation import check_place
+
+from .forms import VolunteerPlaceForm
+from .models import Place, PlaceCategory, PlacePhoto
 
 
 def home(request):
@@ -45,6 +52,10 @@ def home(request):
         "nav_distance": _("Расстояние"),
         "nav_duration": _("Время"),
         "nav_fallback": _("Маршрут по прямой (сервис недоступен)"),
+        "nav_transport": _("Способ передвижения"),
+        "nav_driving": _("На автомобиле"),
+        "nav_foot": _("Пешком"),
+        "nav_bike": _("На велосипеде"),
         "reviews_title": _("Отзывы"),
         "reviews_empty": _("Пока нет отзывов"),
         "review_yours": _("Ваш отзыв"),
@@ -79,3 +90,34 @@ def home(request):
 def donate(request):
     """Страница добровольных донатов (Этап 7)."""
     return render(request, "donate.html", {"donate_url": settings.DONATE_URL})
+
+
+@login_required(login_url="users:login")
+def volunteer_place_add(request):
+    """Принимает заявку волонтёра и сохраняет её только для модерации."""
+    if not request.user.is_volunteer():
+        raise PermissionDenied("Добавлять места могут только волонтёры.")
+
+    if request.method == "POST":
+        form = VolunteerPlaceForm(request.POST, request.FILES)
+        if form.is_valid():
+            with transaction.atomic():
+                place = form.save(commit=False)
+                place.added_by = request.user
+                place.moderation_status = Place.ModerationStatus.PENDING
+                # Используем ту же проверку, что и в админке. Совпадение
+                # запрещённых слов не публикуется и сразу уходит в rejected.
+                forbidden_hits = check_place(place)
+                if forbidden_hits:
+                    place.moderation_status = Place.ModerationStatus.REJECTED
+                place.save()
+                for index, image in enumerate(request.FILES.getlist("photos")):
+                    PlacePhoto.objects.create(place=place, image=image, sort_order=index)
+            if forbidden_hits:
+                messages.warning(request, "Заявка сохранена, но требует ручной проверки модератором.")
+            else:
+                messages.success(request, "Место отправлено на проверку.")
+            return redirect("places:volunteer_place_add")
+    else:
+        form = VolunteerPlaceForm()
+    return render(request, "places/volunteer_place_form.html", {"form": form})

@@ -24,6 +24,20 @@ html, body {
 
 body { display: flex; flex-direction: column; }
 
+/* Базовый стиль ``main`` рассчитан на обычные страницы с текстом: у него
+   max-width: 960px и автоматические внешние отступы. На карте все дочерние
+   элементы позиционируются абсолютно, поэтому без явной ширины ``main``
+   сжимается до одних только padding-отступов, а #map получает width: 0.
+   Этот файл подключается только к главной странице с картой. */
+body > main {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
 header#site-header {
   position: fixed;
   z-index: 600;
@@ -262,6 +276,8 @@ header#site-header h1 {
   box-shadow: var(--shadow);
   padding: 16px;
 }
+.nav-profile { display: block; margin: 0 0 10px; color: var(--muted); font-size: .85rem; }
+.nav-profile select { display: block; width: 100%; margin-top: 4px; padding: 6px; border: 1px solid var(--border); border-radius: 6px; font: inherit; color: var(--ink); }
 #nav-info { margin: 0; color: var(--ink); font-size: 0.95rem; }
 #nav-info strong { color: var(--ochre); }
 

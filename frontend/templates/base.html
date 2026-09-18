@@ -19,6 +19,7 @@
     <a href="{% url 'booking:object_list' %}">{% trans "Бронирование" %}</a>
     <a href="{% url 'donate' %}">{% trans "Поддержать" %}</a>
     {% if user.is_authenticated %}
+      {% if user.is_volunteer %}<a href="{% url 'places:volunteer_place_add' %}">{% trans "Добавить место" %}</a>{% endif %}
       {% if user.is_place_owner %}<a href="{% url 'booking:my_panel' %}">{% trans "Кабинет" %}</a>{% endif %}
       <a href="{% url 'users:logout' %}">{% trans "Выйти" %} ({{ user.username }})</a>
     {% else %}
@@ -41,6 +42,13 @@
     </select>
   </form>
 </header>
-<main>{% block content %}{% endblock %}</main>
+<main>
+  {% if messages %}
+  <div class="messages" aria-live="polite">
+    {% for message in messages %}<p class="message {{ message.tags }}">{{ message }}</p>{% endfor %}
+  </div>
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
 </body>
 </html>

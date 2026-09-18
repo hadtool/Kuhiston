@@ -36,6 +36,7 @@ urlpatterns = [
     path('api/offline/regions/<int:pk>/', api.OfflineRegionBundleView.as_view(), name='api-offline-region-bundle'),
     path('api/categories/', api.CategoryListView.as_view(), name='api-categories'),
     path('booking/', include('booking.urls')),
+    path('', include('places.urls')),
     path('users/', include('users.urls')),
     path('admin/', admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),

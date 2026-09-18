@@ -11,6 +11,7 @@
   if (!page || !mapEl) return;
 
   const apiKey = page.dataset.maptilerKey || "";
+  const terrainSourceId = "maptiler-terrain";
   const I18N = parseStrings();
   const isAuth = page.dataset.auth === "1";
   const formatter = new Intl.NumberFormat(document.documentElement.lang || "ru", { maximumFractionDigits: 1 });
@@ -46,6 +47,14 @@
   map.addControl(new maptilersdk.NavigationControl({ showCompass: true }), "top-left");
 
   map.on("load", () => {
+    // ``setTerrain`` принимает id raster-dem источника. Без него MapLibre
+    // выбрасывает ошибку и 3D-кнопка не работает.
+    map.addSource(terrainSourceId, {
+      type: "raster-dem",
+      url: `https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=${encodeURIComponent(apiKey)}`,
+      tileSize: 512,
+      maxzoom: 14,
+    });
     loadPlaces();
   });
 
@@ -92,6 +101,13 @@
 
   // клик по карте = ручной выбор точки (повторный клик — убрать точку)
   map.on("click", (e) => {
+    // Элементы интерфейса лежат поверх контейнера MapLibre. Их click-события
+    // всплывают до карты, поэтому без этой проверки нажатие на «3D», маршрут
+    // или карточку одновременно ставит пользовательскую точку на карте.
+    const target = e.originalEvent.target;
+    if (target?.closest?.("#scene-actions, #category-bar, #place-card, #route-panel, #routes-panel, #nav-panel, #offline-panel, .maplibregl-marker, .maplibregl-control-container")) {
+      return;
+    }
     if (state.userPoint && state.userMarker) {
       clearUserPoint();
     } else {
@@ -311,7 +327,7 @@
     state.is3d = !state.is3d;
     btn3d.classList.toggle("active", state.is3d);
     if (state.is3d) {
-      map.setTerrain({ exaggeration: 1.2 });
+      map.setTerrain({ source: terrainSourceId, exaggeration: 1.2 });
       map.easeTo({ pitch: 60, zoom: Math.max(map.getZoom(), 10.5) });
     } else {
       map.setTerrain(null);
@@ -531,7 +547,9 @@
   /* ---------- навигация по дорогам/тропам через OSRM (Этап 3, задача 3) ---------- */
   const navPanel = document.getElementById("nav-panel");
   const navInfo = document.getElementById("nav-info");
+  const navProfile = document.getElementById("nav-profile");
   let navSourceId = null;
+  let navigationDestination = null;
 
   function drawNavLine(coords) {
     if (navSourceId) {
@@ -556,11 +574,12 @@
 
   async function loadNavigation(endLat, endLng) {
     const origin = state.userPoint || map.getCenter();
+    navigationDestination = { lat: endLat, lng: endLng };
     try {
       const url = new URL("/api/route/navigation/", window.location.origin);
       url.searchParams.set("start", `${origin.lat},${origin.lng}`);
       url.searchParams.set("end", `${endLat},${endLng}`);
-      url.searchParams.set("profile", "driving");
+      url.searchParams.set("profile", navProfile.value);
       const resp = await fetch(url, { headers: { Accept: "application/json" } });
       if (!resp.ok) throw new Error(resp.status);
       const data = await resp.json();
@@ -574,9 +593,16 @@
     }
   }
 
+  navProfile.addEventListener("change", () => {
+    if (navigationDestination) {
+      loadNavigation(navigationDestination.lat, navigationDestination.lng);
+    }
+  });
+
   document.getElementById("nav-close").addEventListener("click", () => {
     navPanel.hidden = true;
     drawNavLine([]);
+    navigationDestination = null;
   });
 
   /* ---------- офлайн-режим (Этап 6) ---------- */

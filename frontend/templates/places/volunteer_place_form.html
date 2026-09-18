@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Добавить место" %} — {{ brand_name }}{% endblock %}
+{% block content %}
+<form class="volunteer-form" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <h2>{% trans "Новое место" %}</h2>
+  <p>{% trans "Заявка будет сохранена со статусом «на проверке» и станет видна туристам после модерации." %}</p>
+  {{ form.non_field_errors }}
+  <div class="volunteer-form__grid">
+    {% for field in form %}
+    <div class="volunteer-form__field {% if field.name|slice:':12' == 'description_' %}volunteer-form__wide{% endif %}">
+      <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+      {{ field }}
+      {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+      {% if field.errors %}<ul class="volunteer-form__errors">{{ field.errors }}</ul>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  <button class="btn ochre" type="submit">{% trans "Отправить на проверку" %}</button>
+</form>
+{% endblock %}

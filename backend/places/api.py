@@ -68,7 +68,9 @@ class PlaceListView(generics.ListAPIView):
 
 
 class PlaceDetailView(generics.RetrieveAPIView):
-    queryset = Place.objects.select_related("category", "region").prefetch_related("photos")
+    # Заявки волонтёров со статусом pending/rejected не должны раскрываться
+    # через прямой URL до решения модератора.
+    queryset = Place.objects.filter(moderation_status="published").select_related("category", "region").prefetch_related("photos")
     serializer_class = PlaceDetailSerializer
 
     def get_serializer_context(self):

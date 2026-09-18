@@ -1,7 +1,9 @@
 /* Kuhiston offline shell (Этап 6).
    Кэширует статику приложения и тайлы карты, скачанные по региону
    (см. precacheRegionTiles в map.js). */
-const SHELL_CACHE = "kuhiston-shell-v1";
+// Новая версия очищает устаревший CSS, из-за которого контейнер карты мог
+// оставаться нулевой ширины у уже посетивших сайт пользователей.
+const SHELL_CACHE = "kuhiston-shell-v4";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

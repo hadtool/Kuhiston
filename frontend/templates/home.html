@@ -4,7 +4,7 @@
 
 {% block extra_head %}
 <link rel="stylesheet" href="https://cdn.maptiler.com/maptiler-sdk-js/v2.5.1/maptiler-sdk.css">
-<link rel="stylesheet" href="{% static 'css/map.css' %}">
+<link rel="stylesheet" href="{% static 'css/map.css' %}?v=2">
 {% endblock %}
 
 {% block content %}
@@ -49,6 +49,13 @@
   <aside id="nav-panel" hidden>
     <button class="place-card__close" id="nav-close">×</button>
     <h3 class="route-panel__title">{% trans "Маршрут" %}</h3>
+    <label class="nav-profile" for="nav-profile">{% trans "Способ передвижения" %}
+      <select id="nav-profile">
+        <option value="driving">{% trans "На автомобиле" %}</option>
+        <option value="foot">{% trans "Пешком" %}</option>
+        <option value="bike">{% trans "На велосипеде" %}</option>
+      </select>
+    </label>
     <div id="nav-info"></div>
   </aside>
 
@@ -67,5 +74,5 @@
 
 {{ js_strings|json_script:"i18n-strings" }}
 <script src="https://cdn.maptiler.com/maptiler-sdk-js/v2.5.1/maptiler-sdk.umd.min.js"></script>
-<script src="{% static 'js/map.js' %}" defer></script>
+<script src="{% static 'js/map.js' %}?v=3" defer></script>
 {% endblock %}
